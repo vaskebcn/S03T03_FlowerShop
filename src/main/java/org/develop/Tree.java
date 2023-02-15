@@ -1,6 +1,4 @@
-package s3_t3_montseliz;
-
-import java.util.HashMap;
+package org.develop;
 
 public class Tree implements IProduct {
 
@@ -10,7 +8,6 @@ public class Tree implements IProduct {
     int quantity;
     String name;
     double price;
-    long stock;
     float height;
 
     public Tree() {
@@ -54,14 +51,6 @@ public class Tree implements IProduct {
         this.price = price;
     }
 
-    public long getStock() {
-        return stock;
-    }
-
-    public void setStock(long stock) {
-        this.stock = stock;
-    }
-
     public float getHeight() {
         return height;
     }
@@ -71,19 +60,14 @@ public class Tree implements IProduct {
     }
 
     @Override
-    public void addProduct() {
-
+    public String toString() {
+        return "Tree{" +
+                "ID=" + ID +
+                ", ref=" + ref +
+                ", quantity=" + quantity +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", height=" + height +
+                '}';
     }
-
-    @Override
-    public void removeProduct() {
-
-    }
-
-    @Override
-    public void printStock() {
-        trees.values().stream()
-                .filter(p -> p.getStock() >= 0).forEach(System.out::println);
-    }
-
 }

@@ -1,6 +1,4 @@
-package s3_t3_montseliz;
-
-import java.util.HashMap;
+package org.develop;
 
 public class Decoration implements IProduct {
 
@@ -10,7 +8,6 @@ public class Decoration implements IProduct {
     int quantity;
     String name;
     double price;
-    long stock;
     String material; //wood or plastic
 
     public Decoration() {
@@ -54,14 +51,6 @@ public class Decoration implements IProduct {
         this.price = price;
     }
 
-    public long getStock() {
-        return stock;
-    }
-
-    public void setStock(long stock) {
-        this.stock = stock;
-    }
-
     public String getMaterial() {
         return material;
     }
@@ -71,17 +60,14 @@ public class Decoration implements IProduct {
     }
 
     @Override
-    public void addProduct() {
+    public String toString() {
+        return "Decoration{" +
+                "ID=" + ID +
+                ", ref=" + ref +
+                ", quantity=" + quantity +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", material='" + material + '\'' +
+                '}';
     }
-
-    @Override
-    public void removeProduct() {
-    }
-
-    @Override
-    public void printStock() {
-        decorations.values().stream()
-                .filter(p -> p.getStock() >= 0).forEach(System.out::println);
-    }
-
 }
