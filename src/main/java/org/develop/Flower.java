@@ -1,6 +1,4 @@
-package s3_t3_montseliz;
-
-import java.util.HashMap;
+package org.develop;
 
 public class Flower implements IProduct {
 
@@ -10,7 +8,6 @@ public class Flower implements IProduct {
     int quantity;
     String name;
     double price;
-    long stock;
     String colour;
 
     public Flower() {
@@ -54,34 +51,21 @@ public class Flower implements IProduct {
         this.price = price;
     }
 
-    public long getStock() {
-        return stock;
-    }
-
-    public void setStock(long stock) {
-        this.stock = stock;
-    }
-
     public String getColour() {
         return colour;
     }
 
-    public void setColour(String colour) {
-        this.colour = colour;
-    }
+    public void setColour(String colour) { this.colour = colour; }
 
     @Override
-    public void addProduct() {
+    public String toString() {
+        return "Flower{" +
+                "ID=" + ID +
+                ", ref=" + ref +
+                ", quantity=" + quantity +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", colour='" + colour + '\'' +
+                '}';
     }
-
-    @Override
-    public void removeProduct() {
-    }
-
-    @Override
-    public void printStock() {
-        flowers.values().stream()
-                .filter(p -> p.getStock() >= 0).forEach(System.out::println);
-    }
-
 }
