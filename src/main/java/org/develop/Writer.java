@@ -1,2 +1,5 @@
-package org.develop;public class Writer {
+package org.develop;
+
+public class Writer {
+
 }
