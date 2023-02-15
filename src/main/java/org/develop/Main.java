@@ -2,8 +2,49 @@ package org.develop;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        int menu = 0;
+
+        do {
+            menu = Input.scanningForInt("""
+                    Choose which option do you want of the next menu:
+                    1. Create a flower shop. 
+                    2. Add a new tree.
+                    3. Add a new flower.
+                    4. Add a new decoration.
+                    5. Print all the store catalog.
+                    6. Remove a tree.
+                    7. Remove a flower.
+                    8. Remove a decoration.
+                    9. Print all the stock quantity.
+                    10. Print the total price of the stock products.
+                    11. Create a purchase ticket with products.
+                    12. Print a history of sales.
+                    13. Print the total sales of the shop.
+                    0. Exit the application.
+                    Choose a number between 0 to 13:""");
+
+            switch (menu) {
+                case 0 -> System.out.println("Thank you for your purchase!");
+                case 1 -> createFlowerShop();
+                case 2 -> addTree();
+                case 3 -> addFlower();
+                case 4 -> addDecoration();
+                case 5 -> printCatalog();
+                case 6 -> removeTree();
+                case 7 -> removeFlower();
+                case 8 -> removeDecoration();
+                case 9 -> printStockQuantity();
+                case 10 -> printTotalPriceProducts();
+                case 11 -> createNewTicket();
+                case 12 -> historySales();
+                case 13 -> totalSalesShop();
+                default -> System.out.println("Error. Introduce a number between 0 to 13.");
+            }
+
+        } while (menu != 0);
+
     }
+
 }
 
 /*Decisions en grup previes
