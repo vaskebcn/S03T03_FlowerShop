@@ -1,54 +1,12 @@
 package org.develop;
 
-public class Tree extends  Product {
+public class Tree extends Product {
 
-    static int idCounter = 1;
-    final int ID;
-    int ref;
-    int quantity;
-    String name;
-    double price;
-    float height;
+    private float height;
 
-    public Tree() {
-        this.ID = Tree.idCounter++;
-
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public int getRef() {
-        return ref;
-    }
-
-    public void setRef(int ref) {
-        this.ref = ref;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public Tree(String ref, String name, int quantity, double price, float height) {
+        super(ref, name, quantity, price, ProductType.TREE);
+        this.height = height;
     }
 
     public float getHeight() {
@@ -62,12 +20,13 @@ public class Tree extends  Product {
     @Override
     public String toString() {
         return "Tree{" +
-                "ID=" + ID +
-                ", ref=" + ref +
-                ", quantity=" + quantity +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", height=" + height +
+                "ID=" + super.getID() +
+                ", ref='" + super.getRef() + '\'' +
+                ", name='" + super.getName() + '\'' +
+                ", height=" + this.height +
+                ", quantity=" + super.getQuantity() +
+                ", price=" + super.getPrice() +
                 '}';
     }
 }
+
