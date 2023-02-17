@@ -4,8 +4,8 @@ public class Flower extends Product {
 
     private String colour;
 
-    public Flower(int id, String ref, String name, int quantity, double price, String colour) {
-        super(id, ref, name, quantity, price, ProductType.FLOWER);
+    public Flower(String ref, String name, int quantity, double price, String colour) {
+        super(ref, name, quantity, price, ProductType.FLOWER);
         this.colour = colour;
     }
 
@@ -19,7 +19,7 @@ public class Flower extends Product {
 
     @Override
     public String toString() {
-        return "Tree{" +
+        return "Flower{" +
                 "ID=" + super.getID() +
                 ", ref='" + super.getRef() + '\'' +
                 ", name='" + super.getName() + '\'' +

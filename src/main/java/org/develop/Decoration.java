@@ -4,8 +4,8 @@ public class Decoration extends Product {
 
     private MaterialType material; //wood or plastic
 
-    public Decoration(int id, String ref, String name, int quantity, double price, MaterialType material) {
-        super(id, ref, name, quantity, price, ProductType.DECORATION);
+    public Decoration(String ref, String name, int quantity, double price, MaterialType material) {
+        super(ref, name, quantity, price, ProductType.DECORATION);
         this.material = material;
     }
 
@@ -23,7 +23,7 @@ public class Decoration extends Product {
 
     @Override
     public String toString() {
-        return "Tree{" +
+        return "Decoration{" +
                 "ID=" + super.getID() +
                 ", ref='" + super.getRef() + '\'' +
                 ", name='" + super.getName() + '\'' +

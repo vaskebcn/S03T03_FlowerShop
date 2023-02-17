@@ -11,7 +11,7 @@ public class Product {
     private ProductType productType;
 
 
-    public Product(int id, String ref, String name, int quantity, double price, ProductType productType) {
+    public Product(String ref, String name, int quantity, double price, ProductType productType) {
         this.ID = Product.idCounter++;
         this.ref = ref;
         this.name = name;
@@ -71,4 +71,6 @@ public class Product {
                 ", productType=" + productType +
                 '}';
     }
+
+
 }

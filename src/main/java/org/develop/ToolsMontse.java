@@ -4,6 +4,7 @@ import java.sql.SQLOutput;
 
 public class ToolsMontse {
     public static Product.ProductType chooseProductType() {
+        boolean choose = true;
         int type = 0;
         Product.ProductType productType = null;
 
@@ -13,23 +14,24 @@ public class ToolsMontse {
                     1. Tree. 
                     2. Flower.
                     3. Decoration.
-                    0. Exit the menu.
-                    Write a number between 0 to 3:""");
+                    Write a number between 1 to 3:""");
 
             switch (type) {
-                case 0 -> System.out.println("Bye bye!");
                 case 1 -> productType = Product.ProductType.TREE;
                 case 2 -> productType = Product.ProductType.FLOWER;
                 case 3 -> productType = Product.ProductType.DECORATION;
-                default -> System.out.println("Error. Introduce a number between 0 to 3.");
+                default -> {
+                    System.out.println("Error. Introduce a number between 0 to 3.");
+                    choose = false;
+                }
             }
-
-        } while (type != 0);
+        } while (!choose);
 
         return productType;
     }
 
     public static Decoration.MaterialType chooseMaterialType() {
+        boolean choose = true;
         int type = 0;
         Decoration.MaterialType materialType = null;
 
@@ -38,21 +40,19 @@ public class ToolsMontse {
                     Choose the type of the material:
                     1. Wood. 
                     2. Plastic.
-                    0. Exit the menu.
-                    Write a number between 0 to 2:""");
+                    Write a number between 1 or 2:""");
 
             switch (type) {
-                case 0 -> System.out.println("Bye bye!");
                 case 1 -> materialType = Decoration.MaterialType.WOOD;
                 case 2 -> materialType = Decoration.MaterialType.PLASTIC;
-                default -> System.out.println("Error. You have to write a number between 0 to 2.");
+                default -> {
+                    System.out.println("Error. You have to write 1 or 2.");
+                    choose = false;
+                }
             }
-        } while (type != 0);
+        } while (!choose);
 
         return materialType;
     }
-
-    //CANVIAR ELS MENÚS DE INT A BOOLEAN PERQUÈ ÉS LA UNITAT MÉS PETITA I PER TANT MÉS EFICIENT!!!
-
 
 }
