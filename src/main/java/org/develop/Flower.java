@@ -1,6 +1,6 @@
 package org.develop;
 
-public class Flower implements IProduct {
+public class Flower extends Product {
 
     static int idCounter = 1;
     final int ID;

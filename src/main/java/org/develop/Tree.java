@@ -1,6 +1,6 @@
 package org.develop;
 
-public class Tree implements IProduct {
+public class Tree extends  Product {
 
     static int idCounter = 1;
     final int ID;

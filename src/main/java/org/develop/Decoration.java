@@ -1,6 +1,6 @@
 package org.develop;
 
-public class Decoration implements IProduct {
+public class Decoration {
 
     static int idCounter = 1;
     final int ID;

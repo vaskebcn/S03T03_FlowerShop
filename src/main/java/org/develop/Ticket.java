@@ -1,11 +1,13 @@
 package org.develop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Ticket implements ITicket{
     static int idCounter = 1;
     final int ID;
-    HashMap<Integer,TicketLine> ticketLines = new HashMap<Integer,TicketLine>();
+    List<TicketLine> ticketLines = new ArrayList<TicketLine>();
     double totalPrice = 0;
 
     public Ticket () {
@@ -15,23 +17,27 @@ public class Ticket implements ITicket{
     public int getID() {
         return ID;
     }
-    public HashMap<Integer,TicketLine> getTicketLines() {
+    public List<TicketLine> getTicketLines() {
         return ticketLines;
     }
 
     @Override
-    public void addTicketLine(IProduct product) {
-        TicketLine ticketLine = new TicketLine(product);
-        if (ticketLines.containsValue(ticketLine)) {
-                product.add1ToQuantity();
-        } else {
-            ticketLines.put(ticketLines.size(), ticketLine);
-        }
+    public void addTicketLine(Product product, int quantity) {
+        TicketLine ticketLine = new TicketLine(product, quantity);
+        ticketLines.add(ticketLine);
     }
 
     @Override
-    public double getTotalPrice() {
+    public void getTotalPrice() {
+        double totalPrice = 0;
+        for (TicketLine line : ticketLines.values()) {
+            totalPrice += line.getProduct().getPrice()*line.getQuantity();
+        }
+        this.totalPrice = (Math.round(totalPrice*100))/100;
+    }
 
-        return 0;
+    @Override
+    public String toString() {
+        return "Ticket{" + "ID=" + ID + ", ticketLines=" + ticketLines + "\ntotalPrice=" + totalPrice + "}";
     }
 }
