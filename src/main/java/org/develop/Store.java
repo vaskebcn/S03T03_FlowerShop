@@ -90,6 +90,7 @@ public class Store implements IStore{
             if (nextSale.equalsIgnoreCase("no")) {
                 System.out.print(saleTicket);
                 salesHistory.put(salesHistory.size()+1, saleTicket); //he afegit el ticket al hashmap de compres fetes
+                Writer.updateStoreDatabase(this);
                 saleCompleted = true;
             }
         }
@@ -101,5 +102,5 @@ public class Store implements IStore{
         storeStock.values().stream().filter(v -> v.getProductType().equals("TREE")).forEach(System.out::println);
         storeStock.values().stream().filter(v -> v.getProductType().equals("FLOWER")).forEach(System.out::println);
         storeStock.values().stream().filter(v -> v.getProductType().equals("DECORATION")).forEach(System.out::println);
-    }    
+    }
 }

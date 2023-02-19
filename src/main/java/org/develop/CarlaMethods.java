@@ -4,7 +4,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 
 public class CarlaMethods {
-    
+
     public static void printCatalog(String storeName) {
         //JSON STUFF aqui s'agafa el json de la store guardat al stores.txt i es guarda de nou com a store¿
         (json)store.showStock();
