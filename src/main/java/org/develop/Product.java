@@ -2,7 +2,7 @@ package org.develop;
 
 public class Product {
 
-    private static int idCounter = 1;
+    private static int idCounter = 0;
     private final int ID;
     private String ref;
     private String name;
@@ -12,7 +12,7 @@ public class Product {
 
 
     public Product(String ref, String name, int quantity, double price, ProductType productType) {
-        this.ID = Product.idCounter++;
+        this.ID = ++idCounter;
         this.ref = ref;
         this.name = name;
         this.quantity = quantity;
