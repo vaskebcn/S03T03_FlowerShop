@@ -1,0 +1,2 @@
+{"Type":TREE,"Price":3.0,"Reference":"T819","Quantity":2,"Height":4.0,"ID":1,"Name":"bonsai"}
+{"Type":FLOWER,"Price":3.0,"Reference":"F327","Quantity":2,"ID":2,"Name":"margarita","Colour":"green"}

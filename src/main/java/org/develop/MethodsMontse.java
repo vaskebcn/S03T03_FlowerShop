@@ -5,10 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.sql.SQLOutput;
 
 public class MethodsMontse {
@@ -43,24 +40,80 @@ public class MethodsMontse {
     public static JSONObject createProductJSON(Product product) {
         JSONObject productJSON = new JSONObject();
 
-        productJSON.put(product.getID(), product);
+        productJSON.put("ID", product.getID());
+        productJSON.put("Reference", product.getRef());
+        productJSON.put("Name", product.getName());
+        productJSON.put("Quantity", product.getQuantity());
+        productJSON.put("Price", product.getPrice());
+        productJSON.put("Type", product.getProductType());
+
+        if (product.getProductType() == Product.ProductType.TREE) {
+            Tree tree = (Tree) product;
+            productJSON.put("Height", tree.getHeight());
+        } else if (product.getProductType() == Product.ProductType.FLOWER) {
+            Flower flower = (Flower) product;
+            productJSON.put("Colour", flower.getColour());
+        } else if (product.getProductType() == Product.ProductType.DECORATION) {
+            Decoration decoration = (Decoration) product;
+            productJSON.put ("Material", decoration.getMaterial());
+        }
 
         return productJSON;
     }
 
     public static void writeProductJSON(JSONObject productJSON) {
-        try (FileWriter file = new FileWriter("Products.txt", true)) {
-            file.write(productJSON.toJSONString());
-            file.flush();
 
+        try {
+            File file = new File ("src\\main\\resources\\Products.txt");
+            file.createNewFile();
+
+            if (file.canWrite()) {
+                FileWriter filewriter = new FileWriter(file, true);
+                filewriter.write(productJSON.toJSONString() + "\n");
+                filewriter.close();
+                System.out.println("Successfully written JSON Object to a file.");
+            } else {
+                System.out.println("Unable to write the JSON Object to a file.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static JSONArray readProductsJSON() {
+        JSONArray productArrayJSON = new JSONArray();
+        String line = "";
+
+        try {
+            File file = new File("Products.txt");
+
+            if (file.exists() && file.canRead()) {
+                FileReader reader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                JSONParser parser = new JSONParser();
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    JSONObject object = (JSONObject) parser.parse(line);
+                    productArrayJSON.add(object);
+                }
+                reader.close();
+            } else {
+                System.out.println("Unable to read the file.");
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return productArrayJSON;
+    }
+
+
+
 }
 
-
+        //A REVISAR: problema amb l'ID al generar el fitxer, es repeteixen ID's si es surt i es torna a entrar a l'app.
+        //A REVISAR: problema amb el mètode readProductsJSON, surt l'opció de "Unable to read the file".
+        //           Possible error en la línia 96 amb el parse.
 
        // TO DO: Mirar si ha estat afegit al HashMap de products de la classe Store
        // i si és que sí, sumar-li quantity += quantity enlloc de crear una instància de T, F o D.
