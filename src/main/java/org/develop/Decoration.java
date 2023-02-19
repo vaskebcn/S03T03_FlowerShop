@@ -9,16 +9,16 @@ public class Decoration extends Product {
         this.material = material;
     }
 
+    public enum MaterialType {
+        WOOD, PLASTIC
+    }
+
     public MaterialType getMaterial() {
         return material;
     }
 
     public void setMaterial(MaterialType material) {
         this.material = material;
-    }
-
-    public enum MaterialType {
-        WOOD, PLASTIC
     }
 
     @Override
