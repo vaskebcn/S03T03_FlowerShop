@@ -20,16 +20,16 @@ public class Product {
         this.productType = productType;
     }
 
+    public enum ProductType {
+        TREE, FLOWER, DECORATION
+    }
+
     public int getID() {
         return ID;
     }
 
     public String getRef() {
         return ref;
-    }
-
-    public void setRef(String ref) {
-        this.ref = ref;
     }
 
     public String getName() {
@@ -56,8 +56,33 @@ public class Product {
         this.price = price;
     }
 
-    public enum ProductType {
-        TREE, FLOWER, DECORATION
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public String obtainRef() {
+        if (productType == ProductType.TREE) {
+            ref = generateReference('T');
+        } else if (productType == ProductType.FLOWER) {
+            ref = generateReference('F');
+        } else if (productType == ProductType.DECORATION){
+            ref = generateReference('D');
+        }
+        return ref;
+    }
+
+    public String generateReference(char type) {
+        String ref = String.valueOf(type);
+        for (int i = 0; i < 3 ; i++) {
+            int numInitial = (int) (Math.random() * 10 + 1);
+            String numToAdd = Integer.toString(numInitial);
+            ref += numToAdd;
+        }
+        return ref;
     }
 
     @Override
