@@ -58,19 +58,6 @@ public class MethodsMontse {
         }
     }
 
-    public static void readProductJSON() {
-        JSONParser jsonParser = new JSONParser();
-
-        try (FileReader reader = new FileReader("Products.txt")) {
-            Object obj = jsonParser.parse(reader);
-            JSONArray productsList = (JSONArray) obj;
-            productsList.forEach(p -> );
-
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
 
 
