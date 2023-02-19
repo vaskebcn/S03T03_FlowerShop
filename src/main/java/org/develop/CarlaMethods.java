@@ -4,49 +4,31 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 
 public class CarlaMethods {
-    //EN PPI DEPRECATED PER ADDPRODUCT()
-    public void addFlower() {
-        String flowerShop = Input.scanningForString("Please indicate the store's name");
-        String ref = generateReference("f");
-        String name = Input.scanningForString("please indicate the product's name");
-        String colour = Input.scanningForString("Please indicate the flower's colour");
-        int quantity = Input.scanningForInt("please indicate quantity of ");
-        double price = Input.scanningForDouble("Please indicate a price");
-        Product flower = new Flower(ref, name, colour, quantity, price);
-        flowerShop.addProduct(flower);
-        writeProduct(flower);
-    }
-
-    //EN PPI DEPRECATED PER ADDPRODUCT()
-    public void addDecoration() {
-        String flowerShop = Input.scanningForString("Please indicate the store's name");
-        String ref = generateReference("f");
-        String name = Input.scanningForString("please indicate the product's name");
-        String material = Input.scanningForString("Please indicate the decoration's material");
-        int quantity = Input.scanningForInt("please indicate quantity of product");
-        double price = Input.scanningForDouble("Please indicate a price");
-        Product decoration = new Decoration(ref, name, material, quantity, price);
-        flowerShop.addProduct(decoration);
-        writeProduct(decoration);
-    }
-
-    //ens el podriem estalviar crec
-    public static void printCatalog(Store store) {
-        store.showStock();
+    
+    public static void printCatalog(String storeName) {
+        //JSON STUFF aqui s'agafa el json de la store guardat al stores.txt i es guarda de nou com a store¿
+        (json)store.showStock();
     }
 
     //no tinc clar que no lhagi fet la Montse, sino primer copiar el seu format per addProduct a la inversa
     public static void removeProduct() {
-
+        String storeName = Input.scanningForString("Please indicate the products store's name");
+        //JSON STUFF aqui s'agafa el json de la store guardat al stores.txt i es guarda de nou com a store¿
+        Store store = null;
+        String ref = Input.scanningForString("Please indicate product's reference");
+        store.getStoreStock().remove(ref);
+        System.out.println("The product has been successfully removed from the store's stock");
+        //JSON STUFF aqui es passa again la store a object json i es fa un overwrite d'aquesta al stores.txt
     }
 
-    public static void totalSalesShop(Store store) {
-        //store.getTickets()? s'hauria de fer una llista de tickets com a atribut de la store¿
+    public static void showAllPreviousSales(String storeName) {
+        //JSON STUFF aqui es mira quin registre de tickets es daquesta store i s'agafa com a json del LaPepitaTickets.txt. Igual sha de canviar el parametre d'entrada
+        (json)salesHistory.values().forEach(System.out::println);
     }
 
     //MINIMETODE per implementar a PRODUCT i cridar-lo al constructor/atribut de TREE,FLOWER I DECORATION: ref = generateReference(tipus);
-    public String generateReference(String type) {
-        String ref = type;
+    public String generateReference(char type) {
+        String ref = String.valueOf(type);
         for (int i = 0; i<3 ; i++) {
             int numInitial = (int) (Math.random() * 10 + 1);
             String numToAdd = Integer.toString(numInitial);

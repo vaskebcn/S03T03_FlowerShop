@@ -8,6 +8,7 @@ public class Store implements IStore{
     
     private String storeName;
     private HashMap<String,Product> storeStock = new HashMap<String,Product>();
+    private HashMap<Integer,ITicket> salesHistory = new HashMap<>();
     
     public Store (String storeName) {
         this.storeName = storeName;
@@ -20,6 +21,8 @@ public class Store implements IStore{
     public HashMap<String,Product> getStoreStock() {
         return storeStock;
     }
+
+    public HashMap<Integer,ITicket> getSalesHistory() { return salesHistory; }
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
@@ -86,6 +89,7 @@ public class Store implements IStore{
             String nextSale = Input.scanningForString("Would you like to add anything else to your sale?");
             if (nextSale.equalsIgnoreCase("no")) {
                 System.out.print(saleTicket);
+                salesHistory.put(salesHistory.size()+1, saleTicket); //he afegit el ticket al hashmap de compres fetes
                 saleCompleted = true;
             }
         }
