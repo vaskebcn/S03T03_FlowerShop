@@ -25,12 +25,13 @@ public class Ticket implements ITicket{
     public void addTicketLine(Product product, int quantity) {
         TicketLine ticketLine = new TicketLine(product, quantity);
         ticketLines.add(ticketLine);
+        getTotalPrice();
     }
 
     @Override
     public void getTotalPrice() {
         double totalPrice = 0;
-        for (TicketLine line : ticketLines.values()) {
+        for (TicketLine line : ticketLines) {
             totalPrice += line.getProduct().getPrice()*line.getQuantity();
         }
         this.totalPrice = (Math.round(totalPrice*100))/100;
@@ -38,6 +39,6 @@ public class Ticket implements ITicket{
 
     @Override
     public String toString() {
-        return "Ticket{" + "ID=" + ID + ", ticketLines=" + ticketLines + "\ntotalPrice=" + totalPrice + "}";
+        return "Ticket{" + "ID=" + ID + ", ticketLines=" + ticketLines + "\ntotalPrice=" + totalPrice + "€ }";
     }
 }
