@@ -29,6 +29,13 @@ public class Product {
     }
 
     public String getRef() {
+        if (productType == ProductType.TREE) {
+            ref = generateReference('T');
+        } else if (productType == ProductType.FLOWER) {
+            ref = generateReference('F');
+        } else if (productType == ProductType.DECORATION){
+            ref = generateReference('D');
+        }
         return ref;
     }
 
@@ -74,7 +81,7 @@ public class Product {
         }
         return ref;
     }
-
+    
     public String generateReference(char type) {
         String ref = String.valueOf(type);
         for (int i = 0; i < 3 ; i++) {

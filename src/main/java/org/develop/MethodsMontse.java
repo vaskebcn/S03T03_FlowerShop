@@ -14,16 +14,19 @@ public class MethodsMontse {
        if (productType == Product.ProductType.TREE) {
            float height = Input.scanningForFloat("Introduce the height:");
            ref = new Product(null, name, quantity, price, Product.ProductType.TREE).obtainRef();
+           ref = new Product(null, name, quantity, price, Product.ProductType.TREE).getRef();
            Product product = new Tree(ref, name, quantity, price, height);
            System.out.println(product);
        } else if (productType == Product.ProductType.FLOWER) {
            String colour = Input.scanningForString("Introduce the colour:");
            ref = new Product(null, name, quantity, price, Product.ProductType.FLOWER).obtainRef();
+           ref = new Product(null, name, quantity, price, Product.ProductType.FLOWER).getRef();
            Product product = new Flower(ref, name, quantity, price, colour);
            System.out.println(product);
        } else if (productType == Product.ProductType.DECORATION) {
            Decoration.MaterialType materialType = ToolsMontse.chooseMaterialType();
            ref = new Product(null, name, quantity, price, Product.ProductType.DECORATION).obtainRef();
+           ref = new Product(null, name, quantity, price, Product.ProductType.DECORATION).getRef();
            Product product = new Decoration(ref, name, quantity, price, materialType);
            System.out.println(product);
        }
