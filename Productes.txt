@@ -1,1 +1,0 @@
-{"Type":TREE,"Price":3.0,"Reference":"T275","Quantity":2,"Height":4.0,"ID":1,"Name":"arbre"}
