@@ -27,8 +27,8 @@ public class Store implements IStore{
 
     @Override
     public void addProduct(Product product) {
-        if (storeStock.containsValue(product)) {
-            product.add1ToQuantity();
+        if (storeStock.containsKey(product.getRef())) {
+            storeStock.get(product.getRef()).addQuantity(product.getQuantity());
         } else {
             storeStock.put(product.getRef(), product);
         }
@@ -65,18 +65,20 @@ public class Store implements IStore{
                 int quantity = Input.scanningForInt("Please indicate quantity");
                 if (product.getQuantity() > quantity) {
                     product.sellProduct(quantity);
+                    saleTicket.addTicketLine(product, quantity);
                 } else if (product.getQuantity() == quantity){
                     storeStock.remove(ref);
                     System.out.println("Lucky you! Last ones on stock!");
+                    saleTicket.addTicketLine(product, quantity);
                 } else if (product.getQuantity() < quantity) {
                     String limitedSale = Input.scanningForString("Sorry, currently we have only " +product.getQuantity()+ " on stock. Would you like to acquire the remaining stock?");
                     if (limitedSale.equalsIgnoreCase("yes")) {
                         quantity = product.getQuantity();
                         storeStock.remove(ref);
                         System.out.println("Excellent choice");
+                        saleTicket.addTicketLine(product, quantity);
                     }
                 }
-                saleTicket.addTicketLine(product, quantity); //aixo no se si funciona havent esborrat en alguns casos el product del storeStock, sino posar a cadascun dels ifs al final
             } else {
                 System.out.println("Sorry, this product is not currently available");
             }
@@ -92,8 +94,8 @@ public class Store implements IStore{
     //aqui es pot millorar, suposo que es poden endreçar per poder imprimir tots alhora, pero vamos aixi tambe tira de moment
     @Override
     public void showStock() {
-        storeStock.filter(v -> v.getProductType().equals("TREE")).forEach((k,v) -> System.out.println(v));
-        storeStock.filter(v -> v.getProductType().equals("FLOWER")).forEach((k,v) -> System.out.println(v));
-        storeStock.filter(v -> v.getProductType().equals("DECORATION")).forEach((k,v) -> System.out.println(v));
+        storeStock.values().stream().filter(v -> v.getProductType().equals("TREE")).forEach(System.out::println);
+        storeStock.values().stream().filter(v -> v.getProductType().equals("FLOWER")).forEach(System.out::println);
+        storeStock.values().stream().filter(v -> v.getProductType().equals("DECORATION")).forEach(System.out::println);
     }    
 }
