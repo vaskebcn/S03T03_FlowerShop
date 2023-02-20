@@ -11,9 +11,8 @@ public class Product {
     private ProductType productType;
 
 
-    public Product(String ref, String name, int quantity, double price, ProductType productType) {
+    public Product(String name, int quantity, double price, ProductType productType) {
         this.ID = ++idCounter;
-        this.ref = ref;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -64,25 +63,22 @@ public class Product {
         this.productType = productType;
     }
 
-    public String obtainRef() {
-        if (productType == ProductType.TREE) {
-            ref = generateReference('T');
-        } else if (productType == ProductType.FLOWER) {
-            ref = generateReference('F');
-        } else if (productType == ProductType.DECORATION){
-            ref = generateReference('D');
-        }
-        return ref;
-    }
-
-    public String generateReference(char type) {
+    public void generateReference(char type) {
         String ref = String.valueOf(type);
         for (int i = 0; i < 3 ; i++) {
             int numInitial = (int) (Math.random() * 10 + 1);
             String numToAdd = Integer.toString(numInitial);
             ref += numToAdd;
         }
-        return ref;
+        this.ref = ref;
+    }
+
+    public void addQuantity(int quantity) {
+        this.quantity += quantity;
+    }
+
+    public void sellQuantity(int quantity) {
+        this.quantity -= quantity;
     }
 
     @Override
@@ -96,6 +92,5 @@ public class Product {
                 ", productType=" + productType +
                 '}';
     }
-
 
 }

@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.sql.SQLOutput;
+import java.util.HashMap;
 
 public class MethodsMontse {
 
@@ -20,21 +21,34 @@ public class MethodsMontse {
 
        if (productType == Product.ProductType.TREE) {
            float height = Input.scanningForFloat("Introduce the height:");
-           product = new Tree(null, name, quantity, price, height);
-           product.obtainRef();
+           product = new Tree(name, quantity, price, height);
+           //System.out.println(product);
            System.out.println("Product of type tree added correctly.");
        } else if (productType == Product.ProductType.FLOWER) {
            String colour = Input.scanningForString("Introduce the colour:");
-           product = new Flower(null, name, quantity, price, colour);
-           product.obtainRef();
+           product = new Flower(name, quantity, price, colour);
+           //System.out.println(product);
            System.out.println("Product of type flower added correctly.");
        } else if (productType == Product.ProductType.DECORATION) {
            Decoration.MaterialType materialType = ToolsMontse.chooseMaterialType();
-           product = new Decoration(null, name, quantity, price, materialType);
-           product.obtainRef();
+           product = new Decoration(name, quantity, price, materialType);
+           //System.out.println(product);
            System.out.println("Product of type decoration added correctly.");
        }
        return product;
+    }
+
+    public static void assignStoreNameWithProduct(HashMap<String, IStore> storesList, HashMap<String,Product> storeStock, Product product) {
+
+        String storeName = Input.scanningForString("Introduce the name of the shop:");
+
+        if (storesList.containsKey(storeName)){
+            storeStock.put(storeName, product);
+            System.out.println("Shop found in the database.");
+        } else {
+            System.out.println("Shop not found in the database. First you have to create a flower shop.");
+        }
+
     }
 
     public static JSONObject createProductJSON(Product product) {
@@ -61,7 +75,23 @@ public class MethodsMontse {
         return productJSON;
     }
 
+    public static String foundStoreName(HashMap<String,Product> storeStock, Product product){
+        String storeName = "";
+
+        for (String key : storeStock.keySet()) {
+            if(storeStock.get(key).equals(product)) {
+                storeName = key;
+            } else {
+                System.out.println("Shop not found. First create a flower shop.");
+            }
+        }
+        return storeName;
+
+    }
+
     public static void writeProductJSON(JSONObject productJSON) {
+
+        //CRIDAR AL MÈTODE foundStoreName per assignar-li al txt el nom de la botiga_products
 
         try {
             File file = new File ("src\\main\\resources\\Products.txt");
@@ -91,8 +121,9 @@ public class MethodsMontse {
                 FileReader reader = new FileReader(file);
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 JSONParser parser = new JSONParser();
+                line = bufferedReader.readLine();
 
-                while ((line = bufferedReader.readLine()) != null) {
+                while (line != null) {
                     JSONObject object = (JSONObject) parser.parse(line);
                     productArrayJSON.add(object);
                 }
@@ -118,7 +149,8 @@ public class MethodsMontse {
        // TO DO: Mirar si ha estat afegit al HashMap de products de la classe Store
        // i si és que sí, sumar-li quantity += quantity enlloc de crear una instància de T, F o D.
 
-
+        //printStockQuantity (String storeFile)
+        // filtrar només el quantity
 
 
 
