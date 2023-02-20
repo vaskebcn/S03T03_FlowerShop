@@ -1,43 +1,39 @@
 package org.develop;
 
+import java.util.HashMap;
+
 public class Main {
     public static void main(String[] args) {
+        HashMap<String, IStore> storesList = new HashMap<>();
+
         int menu = 0;
 
         do {
             menu = Input.scanningForInt("""
                     Choose which option do you want of the next menu:
                     1. Create a flower shop. 
-                    2. Add a new tree.
-                    3. Add a new flower.
-                    4. Add a new decoration.
-                    5. Print all the store catalog.
-                    6. Remove a tree.
-                    7. Remove a flower.
-                    8. Remove a decoration.
-                    9. Print all the stock quantity.
-                    10. Print the total price of the stock products.
-                    11. Create a purchase ticket with products.
-                    12. Print a history of sales.
-                    13. Print the total sales of the shop.
+                    2. Add a new product to store.
+                    3. Print all the store catalog.
+                    4. Remove a product from the store.
+                    5. Print all the stock quantity.
+                    6. Print the total price of the stock products from the store.
+                    7. Create a purchase ticket with products.
+                    8. Print store sales history.
+                    9. Print the total money earned from all sales.
                     0. Exit the application.
-                    Choose a number between 0 to 13:""");
+                    Choose a number between 0 to 9:""");
 
             switch (menu) {
                 case 0 -> System.out.println("Thank you for your purchase!");
-                case 1 -> createFlowerShop();
-                case 2 -> addTree();
-                case 3 -> addFlower();
-                case 4 -> addDecoration();
-                case 5 -> printCatalog();
-                case 6 -> removeTree();
-                case 7 -> removeFlower();
-                case 8 -> removeDecoration();
-                case 9 -> printStockQuantity();
-                case 10 -> printTotalPriceProducts();
-                case 11 -> createNewTicket();
-                case 12 -> historySales();
-                case 13 -> totalSalesShop();
+                case 1 -> createFlowerShop(HashMap<String, IStore> storesList);
+                case 2 -> newProductToStore(HashMap<String, IStore> storesList);
+                case 3 -> printCatalog();
+                case 4 -> removeProductFromStore(HashMap<String, IStore> storesList);
+                case 5 -> printStockQuantity();
+                case 6 -> printStockValue();
+                case 7 -> purchaseSale(HashMap<String, IStore> storesList);
+                case 8 -> printHistorySales();
+                case 9 -> printTotalSalesValue();
                 default -> System.out.println("Error. Introduce a number between 0 to 13.");
             }
 
