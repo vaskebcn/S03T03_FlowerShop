@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class Store implements IStore{
     
     private String storeName;
-    private HashMap<String,Product> storeStock = new HashMap<String,Product>();
+    private HashMap<String,Product> storeStock = new HashMap<>();
     private HashMap<Integer,ITicket> salesHistory = new HashMap<>();
     
     public Store (String storeName) {
