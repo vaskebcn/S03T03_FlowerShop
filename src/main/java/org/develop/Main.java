@@ -4,10 +4,8 @@ import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
-        HashMap<String, IStore> storesList = new HashMap<>();
-
+        HashMap<String,IStore> storesList = new HashMap<>();
         int menu = 0;
-
         do {
             menu = Input.scanningForInt("""
                     Choose which option do you want of the next menu:
@@ -25,13 +23,13 @@ public class Main {
 
             switch (menu) {
                 case 0 -> System.out.println("Thank you for your purchase!");
-                case 1 -> createFlowerShop(HashMap<String, IStore> storesList);
-                case 2 -> newProductToStore(HashMap<String, IStore> storesList);
+                case 1 -> createFlowerShop(storesList);
+                case 2 -> newProductToStore(storesList);
                 case 3 -> printCatalog();
-                case 4 -> removeProductFromStore(HashMap<String, IStore> storesList);
+                case 4 -> removeProductFromStore(storesList);
                 case 5 -> printStockQuantity();
                 case 6 -> printStockValue();
-                case 7 -> purchaseSale(HashMap<String, IStore> storesList);
+                case 7 -> purchaseSale(storesList);
                 case 8 -> printHistorySales();
                 case 9 -> printTotalSalesValue();
                 default -> System.out.println("Error. Introduce a number between 0 to 13.");
@@ -41,48 +39,93 @@ public class Main {
 
     }
 
+    //case1 milosMethod crea nova store amb nom unic i afegeix a stores
+    public static HashMap<String,IStore>  createFlowerShop (HashMap<String,IStore> storesList) {
+        String storeName = Input.scanningForString("Enter store name");
+
+        if(storesList.containsKey(storeName)){
+            storeName = Input.scanningForString("Store name already exists. Choose another store name");
+        }else{
+            storesList.put(storeName, new Store(storeName));
+            System.out.println("Flower Store " + storeName+ " created");
+        }
+        return storesList;
+    }
+
+    //case2 amb metode createProduct Montse i metode store.addProduct Carla
+    public static HashMap<String,IStore>  newProductToStore (HashMap<String,IStore> storesList) {
+        String storeName = Input.scanningForString("Please indicate the name of the store");
+        if (storesList.containsKey(storeName)) {
+            Product newProduct = MethodsMontse.createProduct(); //quan ho moguem la classe sera tipo Helpers.methods()
+            storesList.get(storeName).addProduct(newProduct);
+        } else {
+            System.out.println("Sorry, this store is not on the database");
+        }
+        return storesList;
+    }
+
+    //case3
+    public static void  printCatalog () {
+        String storeName = Input.scanningForString("Please indicate store's name");
+        //JSON STUFF agafar productsPepitaStore.txt, i imprimir forEach line(products)
+        MethodsMontse.readProductsJSON(storeName);
+    }
+
+    //case4
+    public static HashMap<String,IStore>  removeProductFromStore (HashMap<String,IStore> storesList) {
+        String storeName = Input.scanningForString("Please indicate the products store's name");
+        //JSON STUFF aqui s'agafa el json de la store guardat al stores.txt i es guarda de nou com a store¿
+        Store store = null;
+        String ref = Input.scanningForString("Please indicate product's reference");
+        if (store.getStoreStock().containsKey(ref)) {
+            store.getStoreStock().remove(ref);
+            System.out.println("The product has been successfully removed from the store's stock");
+        }
+        //JSON STUFF aqui es passa again la store a object json i es fa un overwrite d'aquesta al stores.txt
+        return storesList;
+    }
+
+    //case5
+    public static void  printStockQuantity () {
+
+
+    }
+
+    //case6
+    public static void  printStockValue () {
+
+
+    }
+
+    //case7
+    public static HashMap<String,IStore>  purchaseSale (HashMap<String,IStore> storesList) {
+
+        return storesList;
+    }
+
+    //case8
+    public static void printHistorySales () {
+
+
+    }
+
+    //case9
+    public static void printTotalSalesValue () {
+
+
+    }
+
+
 }
 
-/*Decisions en grup previes
-    decidir Interface: Istore Milos per floristeria i IProduct Montse per productes arbre, ITicket Carla
-    decidir atributs classes
-        Floristeria: String ID (key), String nom, (HashMap?) stock <Tree>, stock <Flower>, stock <Decoration> objectes
-        Arbre: String ID (key),String ref, String nom, Double alçada, Double preu (value), static int quantity
-        Flor: String ID(key), String ref, String nom, String color, Double preu, static int quantity (sense Set, nomes add o remove)
-        Decoracio: String nom, String material (fusta/plastic), Double preu, static int quantity
-        Ticket: HashMap compra <Products>, Double preuTotal (metode getTotal amb sum products.getPreu())
-    decidir estructura interClasses
 
-    ITicket ticket3 = new Ticket<>()
-    IProduct sequoya = new Tree<>();
-    Istore floristeriaLaPepa = new FlowerShop<>();
- */
 
-//3 possibles separacions
-/*crear les classes de productes
-    En una floristeria, que té un nom, tenim arbres, flors i decoració.
-    Cada arbre té una alçada.
-    Les flors tenen un color.
-    La decoració té un tipus de material: fusta o plàstic.
-    Tots tenen un preu.
-    Una floristeria ha de tenir un stock de cada un dels productes (arbres, flors i decoració).
-    La floristeria té un registre del valor total de l'stock que té.
-    S’ha de crear una classe ticket, on poder registrar les compres en UNA sola llista.
- */
-/*crear el main amb opcions menu baseDeDades
-    Crear Floristeria.
-    Afegir Arbre.
-    Afegir Flor.
-    Afegir Decoració.
-    Retirar arbre.
-    Retirar flor.
-    Retirar decoració.
-    Crear tickets de compra amb múltiples objectes.
- */
-/*crear els fileReaders i fileWriters opcions menu Writers i Readers
+
+/*
+crear els fileReaders i fileWriters opcions menu Writers i Readers
     Stock: Imprimeix per pantalla tots els arbres, flors i decoració que té la floristeria.
     Printar per pantalla stock amb quantitats.
     Printar per pantalla valor total de la floristeria.
     Mostrar una llista de compres antigues.
-    Visualitzar el total de diners guanyats amb totes les vendes.
- */
+    Visualitzar el total de diners guanyats amb totes les vendes.*/
+

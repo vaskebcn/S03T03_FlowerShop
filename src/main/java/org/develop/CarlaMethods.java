@@ -20,7 +20,7 @@ public class CarlaMethods {
             System.out.println("The product has been successfully removed from the store's stock");
         }
         //JSON STUFF aqui es passa again la store a object json i es fa un overwrite d'aquesta al stores.txt
-        retur
+        return storesList;
     }
 
     public static void printHistorySales(String storeName) {

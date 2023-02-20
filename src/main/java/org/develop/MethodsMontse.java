@@ -110,12 +110,12 @@ public class MethodsMontse {
         }
     }
 
-    public static JSONArray readProductsJSON() {
+    public static JSONArray readProductsJSON(String storeName) {
         JSONArray productArrayJSON = new JSONArray();
         String line = "";
 
         try {
-            File file = new File("Products.txt");
+            File file = new File("Products"+storeName+".txt");
 
             if (file.exists() && file.canRead()) {
                 FileReader reader = new FileReader(file);
