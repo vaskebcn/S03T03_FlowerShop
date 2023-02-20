@@ -67,7 +67,7 @@ public class Store implements IStore{
                 Product product = storeStock.get(ref);
                 int quantity = Input.scanningForInt("Please indicate quantity");
                 if (product.getQuantity() > quantity) {
-                    product.sellProduct(quantity);
+                    product.sellQuantity(quantity);
                     saleTicket.addTicketLine(product, quantity);
                 } else if (product.getQuantity() == quantity){
                     storeStock.remove(ref);
@@ -102,5 +102,13 @@ public class Store implements IStore{
         storeStock.values().stream().filter(v -> v.getProductType().equals("TREE")).forEach(System.out::println);
         storeStock.values().stream().filter(v -> v.getProductType().equals("FLOWER")).forEach(System.out::println);
         storeStock.values().stream().filter(v -> v.getProductType().equals("DECORATION")).forEach(System.out::println);
+    }
+
+    public double showStockValue() {
+        double stockValue = 0;
+        for (Product product : storeStock.values()) {
+            stockValue += product.getQuantity()*product.getPrice();
+        }
+        return stockValue;
     }
 }
