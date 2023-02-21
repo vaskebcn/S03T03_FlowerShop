@@ -103,4 +103,8 @@ public class Product {
                 '}';
     }
 
+    public String toString2() {
+        return "";
+    }
+
 }

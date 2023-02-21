@@ -1,8 +1,16 @@
 package org.develop;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 public class Tools {
+
     public static Product.ProductType chooseProductType() {
         boolean choose = true;
         int type = 0;
@@ -58,7 +66,7 @@ public class Tools {
     public static Product createProduct() {
         Product product = null;
 
-        Product.ProductType productType = ToolsMontse.chooseProductType();
+        Product.ProductType productType = Tools.chooseProductType();
         String name = Input.scanningForString("Introduce the name:");
         int quantity = Input.scanningForInt("Introduce the quantity:");
         double price = Input.scanningForDouble("Introduce the price:");
@@ -74,7 +82,7 @@ public class Tools {
             //System.out.println(product);
             System.out.println("Product of type flower added correctly.");
         } else if (productType == Product.ProductType.DECORATION) {
-            Decoration.MaterialType materialType = ToolsMontse.chooseMaterialType();
+            Decoration.MaterialType materialType = Tools.chooseMaterialType();
             product = new Decoration(name, quantity, price, materialType);
             //System.out.println(product);
             System.out.println("Product of type decoration added correctly.");
@@ -82,13 +90,106 @@ public class Tools {
         return product;
     }
 
-    //MODIFICACIÓ DEL DE LA CARLA showStockValue
+    //PRODUCTS
+    public static HashMap<String, Product> JSONProductsToHashMap(JSONArray productArrayJSON) {
+        HashMap<String, Product> storeStockFromJSONArray = new HashMap<>();
+        Product product = null;
+        String ref = "";
+
+        for (Object obj: productArrayJSON) {
+            JSONObject object = (JSONObject) obj;
+
+            int ID = (Integer) object.get("ID");
+            ref = (String) object.get("reference");
+            String name = (String) object.get("name");
+            int quantity = (Integer) object.get("quantity");
+            double price = (Double) object.get("price");
+            Product.ProductType type = (Product.ProductType) object.get("type");
+
+            if (type == Product.ProductType.TREE) {
+                float height = (Float) object.get("height");
+                product = new Tree(ID, ref, name, quantity, price, height);
+            } else if (type == Product.ProductType.FLOWER) {
+                String colour = (String) object.get("colour");
+                product = new Flower(ID, ref, name, quantity, price, colour);
+            } else if (type == Product.ProductType.DECORATION) {
+                Decoration.MaterialType materialType = (Decoration.MaterialType) object.get("material");
+                product = new Decoration(ID, ref, name, quantity, price, materialType);
+            }
+            storeStockFromJSONArray.put(ref, product);
+        }
+        return storeStockFromJSONArray;
+
+    }
+
+    //TICKETS
+    public static HashMap<Integer, ITicket> JSONTicketsToHashMap(JSONArray ticketArrayJSON) {
+        HashMap<Integer, ITicket> salesHistoryFromJSONArray = new HashMap<>();
+        int ID = 0;
+
+        for (Object obj: ticketArrayJSON) {
+            JSONObject object = (JSONObject) obj;
+
+            ID = (Integer) object.get("ID");
+            List<TicketLine> ticketLines = (List<TicketLine>) object.get("ticket lines");
+            double totalPrice = (Double) object.get("total price");
+
+            Ticket ticket = new Ticket(ID, ticketLines, totalPrice);
+            salesHistoryFromJSONArray.put(ID, ticket);
+            }
+
+        return salesHistoryFromJSONArray;
+
+    }
+
+    //REMOVE PRODUCT I UPDATE PRODUCTS TXT
+    public static void removeJSONProduct(String ref, String storeName) {
+        boolean found = false;
+
+        JSONArray productsArrayJSON = Reader.readProductsJSON(storeName);
+
+        for (Object obj : productsArrayJSON) {
+            JSONObject object = (JSONObject) obj;
+            if (object.get("reference").equals(ref)) {
+                found = true;
+                productsArrayJSON.remove(obj);
+                System.out.println("Product deleted successfully.");
+                try {
+                    FileWriter filewriter = new FileWriter("src\\main\\resources\\Products" + storeName + ".txt", true);
+                    BufferedWriter bufferedwriter = new BufferedWriter(filewriter);
+                    for (Object obj2 : productsArrayJSON) {
+                        JSONObject object2 = (JSONObject) obj2;
+                        filewriter.write(object2.toJSONString() + "\n");
+                    }
+                    bufferedwriter.close();
+                    System.out.println("File updated successfully.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (!found){
+            System.out.println("Product not found in the database.");
+        }
+    }
+
+    //MODIFICACIÓ DEL DE LA CARLA showStockValue() de la classe Store
     public static double showStockValueFromJSON(HashMap<String, Product> storeStockFromJSONArray) {
         double stockValue = 0;
         for (Product product : storeStockFromJSONArray.values()) {
             stockValue += product.getQuantity()*product.getPrice();
         }
         return stockValue;
+    }
+
+    public static double showTicketValueFromJSON(HashMap<Integer, ITicket> salesHistoryFromJSONArray) {
+        double ticketValue = 0;
+        for (ITicket ticket : salesHistoryFromJSONArray.values()) {
+            ticketValue += ((Ticket) ticket).getTicketLines().stream()
+                    .mapToDouble(t -> t.getQuantity() * t.getProduct().getPrice()).sum();
+        }
+        return ticketValue;
+
     }
 
 

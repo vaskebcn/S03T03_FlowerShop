@@ -89,7 +89,7 @@ public class Store implements IStore{
             String nextSale = Input.scanningForString("Would you like to add anything else to your sale?");
             if (nextSale.equalsIgnoreCase("no")) {
                 System.out.print(saleTicket);
-                salesHistory.put(salesHistory.size()+1, saleTicket); //he afegit el ticket al hashmap de compres fetes
+                salesHistory.put(((Ticket) saleTicket).getID(), saleTicket); //he afegit el ticket al hashmap de compres fetes
                 Writer.updateStoreDatabase(this);
                 saleCompleted = true;
             }
