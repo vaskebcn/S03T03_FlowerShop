@@ -6,15 +6,15 @@ import java.util.HashMap;
 
 public class MilosMethods {
 
-    static void createFlowerShop(){
+    static void createFlowerShop(){ //S'HA DE CREAR UN OBJECTE FlowerShop
 
         String storeName = Input.scanningForString("Enter store name");
 
-        if(allStores.contains(storeName)){
+        if(storesList.contains(storeName)){
             System.out.println("Store name already exist. Choose another store name");
             createFlowerShop();
         }else{
-            allStores.add(new Store(storeName));
+            storesList.add(new Store(storeName));
             System.out.println("Flower Store " + storeName+ " created");
         }
 
@@ -27,7 +27,7 @@ public class MilosMethods {
         Store store = null;
 
 //        searching for a store
-        for (Store s : allStores) {
+        for (Store s : storesList) {
             if (s.getStoreName().equalsIgnoreCase(storeName)) {
                 store = s;
             }
@@ -58,7 +58,7 @@ public class MilosMethods {
         double totalPrice = 0;
 
 //        searching for a store
-        for (Store s : allStores) {
+        for (Store s : storesList) {
             if (s.getStoreName().equalsIgnoreCase(storeName)) {
                 store = s;
             }
@@ -88,12 +88,12 @@ public class MilosMethods {
 //        allTickets.add(new Ticket());
         Store store = null;
 
-        for (Store s : allStores) {
+        for (Store s : storesList) {
             System.out.println(s.getStoreName());
         }
         String storeName = Input.scanningForString("Select store");
 
-        for (Store s : allStores) {
+        for (Store s : storesList) {
             if(storeName.equalsIgnoreCase(s.getStoreName())){
                 store = s;
             }

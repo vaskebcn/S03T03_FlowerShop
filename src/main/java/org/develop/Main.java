@@ -1,5 +1,7 @@
 package org.develop;
 
+import org.json.simple.JSONArray;
+
 import java.util.HashMap;
 
 public class Main {
@@ -39,12 +41,13 @@ public class Main {
 
     }
 
-    //case1 milosMethod crea nova store amb nom unic i afegeix a stores
+    //case1 MilosMethod crea nova store amb nom únic i afegeix a stores
     public static HashMap<String,IStore>  createFlowerShop (HashMap<String,IStore> storesList) {
-        String storeName = Input.scanningForString("Enter store name");
+        String storeName = Input.scanningForString("Enter the store name:");
 
         if(storesList.containsKey(storeName)){
             storeName = Input.scanningForString("Store name already exists. Choose another store name");
+            System.out.println("Flower Store " + storeName + "cannot be used");
         }else{
             storesList.put(storeName, new Store(storeName));
             System.out.println("Flower Store " + storeName+ " created");
@@ -54,7 +57,7 @@ public class Main {
 
     //case2 amb metode createProduct Montse i metode store.addProduct Carla
     public static HashMap<String,IStore>  newProductToStore (HashMap<String,IStore> storesList) {
-        String storeName = Input.scanningForString("Please indicate the name of the store");
+        String storeName = Input.scanningForString("Please indicate the name of the store:");
         if (storesList.containsKey(storeName)) {
             Product newProduct = MethodsMontse.createProduct(); //quan ho moguem la classe sera tipo Helpers.methods()
             storesList.get(storeName).addProduct(newProduct);
@@ -66,9 +69,11 @@ public class Main {
 
     //case3
     public static void  printCatalog () {
-        String storeName = Input.scanningForString("Please indicate store's name");
+        String storeName = Input.scanningForString("Please indicate store's name:");
         //JSON STUFF agafar productsPepitaStore.txt, i imprimir forEach line(products)
-        MethodsMontse.readProductsJSON(storeName);
+        JSONArray productArrayJSON = MethodsMontse.readProductsJSON(storeName);
+        HashMap<String, Product> storeStockFromJSONArray = MethodsMontse.JSONArrayToHashMap(productArrayJSON);
+        storeStockFromJSONArray.values().stream().forEach(System.out::println);
     }
 
     //case4
@@ -86,15 +91,21 @@ public class Main {
     }
 
     //case5
-    public static void  printStockQuantity () {
+    public static void  printStockQuantity (String storeName) {
+        JSONArray productArrayJSON = MethodsMontse.readProductsJSON(storeName);
+        HashMap<String, Product> storeStockFromJSONArray = MethodsMontse.JSONArrayToHashMap(productArrayJSON);
 
-
+        for (Product product : storeStockFromJSONArray.values()) {
+            System.out.println(product.getProductType() + " / " + product.getName() + ": " + product.getQuantity());
+        }
     }
 
     //case6
-    public static void  printStockValue () {
+    public static void  printStockValue (String storeName) {
+        JSONArray productArrayJSON = MethodsMontse.readProductsJSON(storeName);
+        HashMap<String, Product> storeStockFromJSONArray = MethodsMontse.JSONArrayToHashMap(productArrayJSON);
 
-
+        MethodsMontse.showStockValueFromJSON(storeStockFromJSONArray);
     }
 
     //case7
@@ -104,9 +115,14 @@ public class Main {
     }
 
     //case8
-    public static void printHistorySales () {
+    public static void printHistorySales (String storeName) {
+        JSONArray storesArrayJSON = ToolsMontse.readStoreJSON(storeName);
+        HashMap<String, IStore> storesListFromJSONArray = ToolsMontse.JSONArrayToHashMap(storesArrayJSON);
 
 
+        //PENSAR-LO
+        /* storesListFromJSONArray.values().stream()
+                .filter(store -> store.getName().equals(storeName))*/
     }
 
     //case9

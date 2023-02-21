@@ -38,19 +38,6 @@ public class MethodsMontse {
        return product;
     }
 
-    public static void assignStoreNameWithProduct(HashMap<String, IStore> storesList, HashMap<String,Product> storeStock, Product product) {
-
-        String storeName = Input.scanningForString("Introduce the name of the shop:");
-
-        if (storesList.containsKey(storeName)){
-            storeStock.put(storeName, product);
-            System.out.println("Shop found in the database.");
-        } else {
-            System.out.println("Shop not found in the database. First you have to create a flower shop.");
-        }
-
-    }
-
     public static JSONObject createProductJSON(Product product) {
         JSONObject productJSON = new JSONObject();
 
@@ -75,26 +62,12 @@ public class MethodsMontse {
         return productJSON;
     }
 
-    public static String foundStoreName(HashMap<String,Product> storeStock, Product product){
-        String storeName = "";
+    public static void writeProductJSON(JSONObject productJSON, String storeName) {
 
-        for (String key : storeStock.keySet()) {
-            if(storeStock.get(key).equals(product)) {
-                storeName = key;
-            } else {
-                System.out.println("Shop not found. First create a flower shop.");
-            }
-        }
-        return storeName;
-
-    }
-
-    public static void writeProductJSON(JSONObject productJSON) {
-
-        //CRIDAR AL MÈTODE foundStoreName per assignar-li al txt el nom de la botiga_products
+        String fileName = "Products" + storeName;
 
         try {
-            File file = new File ("src\\main\\resources\\Products.txt");
+            File file = new File ("src\\main\\resources\\" + fileName + ".txt");
             file.createNewFile();
 
             if (file.canWrite()) {
@@ -138,19 +111,54 @@ public class MethodsMontse {
         return productArrayJSON;
     }
 
+    public static HashMap<String, Product> JSONArrayToHashMap(JSONArray productArrayJSON) {
+        HashMap<String, Product> storeStockFromJSONArray = new HashMap<>();
+        Product product = null;
+        String id = "";
+
+        for (int i = 0; i < productArrayJSON.size(); i++) {
+            JSONObject object = (JSONObject) productArrayJSON.get(i);
+
+            id = (String) object.get("ID");
+            String ref = (String) object.get("Reference");
+            String name = (String) object.get("Name");
+            int quantity = (Integer) object.get("Quantity");
+            double price = (Double) object.get("Price");
+            Product.ProductType type = (Product.ProductType) object.get("Type");
+
+            if (type == Product.ProductType.TREE) {
+                float height = (Float) object.get("Height");
+                product = new Tree(ref, name, quantity, price, height);
+            } else if (type == Product.ProductType.FLOWER) {
+                String colour = (String) object.get("Colour");
+                product = new Flower(ref, name, quantity, price, colour);
+            } else if (type == Product.ProductType.DECORATION) {
+                Decoration.MaterialType materialType = (Decoration.MaterialType) object.get("Material");
+                product = new Decoration(ref, name, quantity, price, materialType);
+            }
+            storeStockFromJSONArray.put(id, product);
+        }
+            return storeStockFromJSONArray;
+
+    }
+
+    //MODIFICACIÓ DEL DE LA CARLA showStockValue
+    public static double showStockValueFromJSON(HashMap<String, Product> storeStockFromJSONArray) {
+        double stockValue = 0;
+        for (Product product : storeStockFromJSONArray.values()) {
+            stockValue += product.getQuantity()*product.getPrice();
+        }
+        return stockValue;
+    }
+
 
 
 }
 
         //A REVISAR: problema amb l'ID al generar el fitxer, es repeteixen ID's si es surt i es torna a entrar a l'app.
         //A REVISAR: problema amb el mètode readProductsJSON, surt l'opció de "Unable to read the file".
-        //           Possible error en la línia 96 amb el parse.
+        //           Possible error en la línia 96 amb el parse. S'HA DE COMPROVAR SI FUNCIONA.
 
-       // TO DO: Mirar si ha estat afegit al HashMap de products de la classe Store
-       // i si és que sí, sumar-li quantity += quantity enlloc de crear una instància de T, F o D.
-
-        //printStockQuantity (String storeFile)
-        // filtrar només el quantity
 
 
 
