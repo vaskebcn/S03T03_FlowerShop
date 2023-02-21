@@ -11,8 +11,8 @@ public class Flower extends Product {
     }
 
     //Constructor pel mètode JSONArrayToHashMap
-    public Flower(String ref, String name, int quantity, double price, String colour) {
-        super(ref, name, quantity, price, ProductType.FLOWER);
+    public Flower(int ID, String ref, String name, int quantity, double price, String colour) {
+        super(ID, ref, name, quantity, price, ProductType.FLOWER);
         this.colour = colour;
     }
 

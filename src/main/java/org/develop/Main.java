@@ -42,7 +42,7 @@ public class Main {
     }
 
     //case1 MilosMethod crea nova store amb nom únic i afegeix a stores
-    public static HashMap<String,IStore>  createFlowerShop (HashMap<String,IStore> storesList) {
+    public static HashMap<String,IStore> createFlowerShop(HashMap<String,IStore> storesList) {
         String storeName = Input.scanningForString("Enter the store name:");
 
         if(storesList.containsKey(storeName)){
@@ -59,7 +59,7 @@ public class Main {
     public static HashMap<String,IStore>  newProductToStore (HashMap<String,IStore> storesList) {
         String storeName = Input.scanningForString("Please indicate the name of the store:");
         if (storesList.containsKey(storeName)) {
-            Product newProduct = MethodsMontse.createProduct(); //quan ho moguem la classe sera tipo Helpers.methods()
+            Product newProduct = Tools.createProduct();
             storesList.get(storeName).addProduct(newProduct);
         } else {
             System.out.println("Sorry, this store is not on the database");
@@ -70,10 +70,13 @@ public class Main {
     //case3
     public static void  printCatalog () {
         String storeName = Input.scanningForString("Please indicate store's name:");
-        //JSON STUFF agafar productsPepitaStore.txt, i imprimir forEach line(products)
+
         JSONArray productArrayJSON = MethodsMontse.readProductsJSON(storeName);
         HashMap<String, Product> storeStockFromJSONArray = MethodsMontse.JSONArrayToHashMap(productArrayJSON);
-        storeStockFromJSONArray.values().stream().forEach(System.out::println);
+
+        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("TREE")).forEach(System.out::println);
+        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("FLOWER")).forEach(System.out::println);
+        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("DECORATION")).forEach(System.out::println);
     }
 
     //case4
