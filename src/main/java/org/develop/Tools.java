@@ -145,20 +145,21 @@ public class Tools {
     //REMOVE PRODUCT I UPDATE PRODUCTS TXT
     public static void removeJSONProduct(String ref, String storeName) {
         boolean found = false;
+        int i = 0;
 
         JSONArray productsArrayJSON = Reader.readProductsJSON(storeName);
 
-        for (Object obj : productsArrayJSON) {
-            JSONObject object = (JSONObject) obj;
+        while ( i < productsArrayJSON.size() && !found) {
+            JSONObject object = (JSONObject) productsArrayJSON.get(i);
             if (object.get("reference").equals(ref)) {
                 found = true;
-                productsArrayJSON.remove(obj);
+                productsArrayJSON.remove(i);
                 System.out.println("Product deleted successfully.");
                 try {
                     FileWriter filewriter = new FileWriter("src\\main\\resources\\Products" + storeName + ".txt", true);
                     BufferedWriter bufferedwriter = new BufferedWriter(filewriter);
-                    for (Object obj2 : productsArrayJSON) {
-                        JSONObject object2 = (JSONObject) obj2;
+                    for (Object obj : productsArrayJSON) {
+                        JSONObject object2 = (JSONObject) obj;
                         filewriter.write(object2.toJSONString() + "\n");
                     }
                     bufferedwriter.close();
@@ -167,6 +168,7 @@ public class Tools {
                     e.printStackTrace();
                 }
             }
+            i++;
         }
         if (!found){
             System.out.println("Product not found in the database.");
