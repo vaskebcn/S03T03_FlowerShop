@@ -3,7 +3,7 @@ package org.develop;
 import java.util.HashMap;
 
 public interface ITicket {
-    public void addTicketLine(IProduct product);
-    public double getTotalPrice();
+    public void addTicketLine(Product product, int quantity);
+    public void getTotalPrice();
 
 }

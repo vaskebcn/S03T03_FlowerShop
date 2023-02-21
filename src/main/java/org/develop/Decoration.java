@@ -1,73 +1,46 @@
 package org.develop;
 
-public class Decoration implements IProduct {
+public class Decoration extends Product {
 
-    static int idCounter = 1;
-    final int ID;
-    int ref;
-    int quantity;
-    String name;
-    double price;
-    String material; //wood or plastic
+    private MaterialType material; //wood or plastic
 
-    public Decoration() {
-
-        this.ID = Decoration.idCounter++;
+    public Decoration(String name, int quantity, double price, MaterialType material) {
+        super(name, quantity, price, ProductType.DECORATION);
+        super.generateReference('D');
+        this.material = material;
     }
 
-    public int getID() {
-        return ID;
+    public enum MaterialType {
+        WOOD, PLASTIC
     }
 
-    public int getRef() {
-        return ref;
-    }
-
-    public void setRef(int ref) {
-        this.ref = ref;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getMaterial() {
+    public MaterialType getMaterial() {
         return material;
     }
 
-    public void setMaterial(String material) {
+    public void setMaterial(MaterialType material) {
         this.material = material;
     }
 
     @Override
     public String toString() {
         return "Decoration{" +
-                "ID=" + ID +
-                ", ref=" + ref +
-                ", quantity=" + quantity +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", material='" + material + '\'' +
+                "ID=" + super.getID() +
+                ", ref='" + super.getRef() + '\'' +
+                ", name='" + super.getName() + '\'' +
+                ", material=" + this.material +
+                ", quantity=" + super.getQuantity() +
+                ", price=" + super.getPrice() +
+                '}';
+    }
+
+    public String toString2() {
+        return "Decoration{" +
+                "ID=" + super.getID() +
+                ", ref='" + super.getRef() + '\'' +
+                ", name='" + super.getName() + '\'' +
+                ", material=" + this.material +
+                ", price=" + super.getPrice() +
                 '}';
     }
 }
