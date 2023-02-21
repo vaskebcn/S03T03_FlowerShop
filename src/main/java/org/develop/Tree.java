@@ -9,6 +9,11 @@ public class Tree extends Product {
         super.generateReference('T');
         this.height = height;
     }
+    //Constructor pel mètode JSONArrayToHashMap
+    public Tree(int ID, String ref, String name, int quantity, double price, float height) {
+        super(ID, ref, name, quantity, price, ProductType.TREE);
+        this.height = height;
+    }
 
     public float getHeight() {
         return height;

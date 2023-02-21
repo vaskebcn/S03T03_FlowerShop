@@ -10,6 +10,12 @@ public class Decoration extends Product {
         this.material = material;
     }
 
+    //Constructor pel mètode JSONArrayToHashMap
+    public Decoration(int ID, String ref, String name, int quantity, double price, MaterialType material) {
+        super(ID, ref, name, quantity, price, ProductType.DECORATION);
+        this.material = material;
+    }
+
     public enum MaterialType {
         WOOD, PLASTIC
     }

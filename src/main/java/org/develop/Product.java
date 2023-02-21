@@ -19,6 +19,16 @@ public class Product {
         this.productType = productType;
     }
 
+    //Constructor pel mètode JSONArrayToHashMap
+    public Product(int ID, String ref, String name, int quantity, double price, ProductType productType) {
+        this.ID = ID;
+        this.ref = ref;
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.productType = productType;
+    }
+
     public enum ProductType {
         TREE, FLOWER, DECORATION
     }
