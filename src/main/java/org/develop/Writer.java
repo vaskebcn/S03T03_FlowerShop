@@ -91,14 +91,9 @@ public class Writer {
         JSONObject storeJSON = new JSONObject();
 
         storeJSON.put("name", store.getStoreName());
-        storeJSON.put("stock", store.getStoreStock());
-        storeJSON.put("sales", store.getSalesHistory());
-
-        String storeName = (String) storeJSON.get("name");
 
         try {
-            File file = new File ("src\\main\\resources\\" + storeName + ".txt");
-            file.createNewFile();
+            File file = new File ("src\\main\\resources\\Stores.txt");
 
             if (file.canWrite()) {
                 FileWriter filewriter = new FileWriter(file, true);
@@ -144,13 +139,6 @@ public class Writer {
     }
 
     //--------------------------------
-
-    //potser no cal amb el updateStoreDatabase
-    public static void removeProduct(Product product) {
-        //identificar
-        //while !found buscar a fitxer
-        //removeJsonLine a TXT
-    }
 
     public static void updateStoreDatabase(Store store) {
         //JSON STUFF passar store a json i sobreescriure la store LaPepita al stores.txt metode1

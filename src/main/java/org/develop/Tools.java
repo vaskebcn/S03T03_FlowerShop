@@ -3,9 +3,7 @@ package org.develop;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -143,7 +141,7 @@ public class Tools {
     }
 
     //REMOVE PRODUCT I UPDATE PRODUCTS TXT
-    public static void removeJSONProduct(String ref, String storeName) {
+    /*public static void removeJSONProduct(String ref, String storeName) {
         boolean found = false;
         int i = 0;
 
@@ -173,9 +171,8 @@ public class Tools {
         if (!found){
             System.out.println("Product not found in the database.");
         }
-    }
+    }*/
 
-    //MODIFICACIÓ DEL DE LA CARLA showStockValue() de la classe Store
     public static double showStockValueFromJSON(HashMap<String, Product> storeStockFromJSONArray) {
         double stockValue = 0;
         for (Product product : storeStockFromJSONArray.values()) {
@@ -185,16 +182,30 @@ public class Tools {
     }
 
     public static double showTicketValueFromJSON(HashMap<Integer, ITicket> salesHistoryFromJSONArray) {
-        double ticketValue = 0;
+        double ticketsValues = 0;
         for (ITicket ticket : salesHistoryFromJSONArray.values()) {
-            ticketValue += ((Ticket) ticket).getTicketLines().stream()
-                    .mapToDouble(t -> t.getQuantity() * t.getProduct().getPrice()).sum();
+            ticketsValues += ((Ticket) ticket).getTotalPrice();
         }
-        return ticketValue;
-
+        return ticketsValues;
     }
 
-
-
+    public static boolean checkExistingStore (String storeName) {
+        boolean found = false;
+        try {
+            File fileToCheck = new File("Stores.txt");
+            BufferedReader br = new BufferedReader(new FileReader(fileToCheck));
+            while (br.readLine() != null && !found) {
+                String line = br.readLine();
+                if(line.contains(storeName)) {
+                    found = true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return found;
+    }
 
 }

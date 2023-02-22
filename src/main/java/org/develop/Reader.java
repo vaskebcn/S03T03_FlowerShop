@@ -43,35 +43,6 @@ public class Reader {
         return productArrayJSON;
     }
 
-    //STORE
-    public static JSONObject readStoreJSON(String storeName) {
-        JSONObject storeJSON = new JSONObject();
-        String line = "";
-
-        try {
-            File file = new File(storeName + ".txt");
-
-            if (file.exists() && file.canRead()) {
-                FileReader reader = new FileReader(file);
-                BufferedReader bufferedReader = new BufferedReader(reader);
-                JSONParser parser = new JSONParser();
-                line = bufferedReader.readLine();
-
-                while (line != null) {
-                    storeJSON = (JSONObject) parser.parse(line);
-                }
-                bufferedReader.close();
-                System.out.println("File successfully read.");
-            } else {
-                System.out.println("Unable to read the file.");
-            }
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        return storeJSON;
-    }
-
     //TICKETS
     public static JSONArray readTicketsJSON(String storeName) {
         JSONArray ticketArrayJSON = new JSONArray();
