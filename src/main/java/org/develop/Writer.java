@@ -91,14 +91,9 @@ public class Writer {
         JSONObject storeJSON = new JSONObject();
 
         storeJSON.put("name", store.getStoreName());
-        storeJSON.put("stock", store.getStoreStock());
-        storeJSON.put("sales", store.getSalesHistory());
-
-        String storeName = (String) storeJSON.get("name");
 
         try {
-            File file = new File ("src\\main\\resources\\" + storeName + ".txt");
-            file.createNewFile();
+            File file = new File ("src\\main\\resources\\Stores.txt");
 
             if (file.canWrite()) {
                 FileWriter filewriter = new FileWriter(file, true);
