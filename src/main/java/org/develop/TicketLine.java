@@ -18,6 +18,6 @@ public class TicketLine {
 
     @Override
     public String toString() {
-        return "{" + "product= " + product.toString() + ", quantity=" + quantity + "}\n";
+        return "\n{" + "product= " + product.toString2() + ", quantity=" + quantity + "}";
     }
 }

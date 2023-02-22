@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Ticket implements ITicket{
-    static int idCounter = 1;
     final int ID;
     List<TicketLine> ticketLines = new ArrayList<TicketLine>();
     double totalPrice = 0;
 
-    public Ticket () {
-        this.ID = idCounter;
-        idCounter++;
+    public Ticket (int ID) {
+        this.ID = ID;
     }
 
     //Constructor pel mètode JSONArrayToHashMap
@@ -37,7 +35,7 @@ public class Ticket implements ITicket{
     public void addTicketLine(Product product, int quantity) {
         TicketLine ticketLine = new TicketLine(product, quantity);
         ticketLines.add(ticketLine);
-        getTotalPrice();
+        calculateTotalPrice();
     }
     @Override
     public void calculateTotalPrice() {
@@ -50,6 +48,6 @@ public class Ticket implements ITicket{
 
     @Override
     public String toString() {
-        return "Ticket{" + "ID=" + ID + ", ticketLines=" + ticketLines + "\ntotalPrice=" + totalPrice + "€ }";
+        return "Ticket{" + "ID=" + ID + ", ticketLines=" + ticketLines + "\ntotalPrice=" + totalPrice + "€\n}";
     }
 }

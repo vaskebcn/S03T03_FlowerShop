@@ -1,8 +1,6 @@
 package org.develop;
 
 public class Product {
-
-    private static int idCounter = 0;
     private final int ID;
     private String ref;
     private String name;
@@ -11,8 +9,8 @@ public class Product {
     private ProductType productType;
 
 
-    public Product(String name, int quantity, double price, ProductType productType) {
-        this.ID = ++idCounter;
+    public Product(int ID, String name, int quantity, double price, ProductType productType) {
+        this.ID = ID;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -93,18 +91,24 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        return productType+"{" +
                 "ID=" + ID +
-                ", ref='" + ref + '\'' +
-                ", name='" + name + '\'' +
+                ", ref='" + ref +
+                ", name='" + name +
                 ", quantity=" + quantity +
                 ", price=" + price +
-                ", productType=" + productType +
                 '}';
     }
-
     public String toString2() {
         return "";
+    }
+
+    public String toString3() {
+        return productType+"{" +
+                "ref='" + ref +
+                ", name='" + name +
+                ", quantity=" + quantity +
+                '}';
     }
 
 }

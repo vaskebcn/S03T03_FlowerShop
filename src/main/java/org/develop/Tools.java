@@ -1,9 +1,10 @@
 package org.develop;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,28 +62,25 @@ public class Tools {
         return materialType;
     }
 
-    public static Product createProduct() {
+    public static Product createProduct(String storeName) {
         Product product = null;
-
         Product.ProductType productType = Tools.chooseProductType();
         String name = Input.scanningForString("Introduce the name:");
         int quantity = Input.scanningForInt("Introduce the quantity:");
         double price = Input.scanningForDouble("Introduce the price:");
-
+        String trimmedStoreName = storeName.trim().replace(" ","_");
+        int ID = Reader.readLastID("Products"+trimmedStoreName+".txt");
         if (productType == Product.ProductType.TREE) {
             float height = Input.scanningForFloat("Introduce the height:");
-            product = new Tree(name, quantity, price, height);
-            //System.out.println(product);
+            product = new Tree(ID, name, quantity, price, height);
             System.out.println("Product of type tree added correctly.");
         } else if (productType == Product.ProductType.FLOWER) {
             String colour = Input.scanningForString("Introduce the colour:");
-            product = new Flower(name, quantity, price, colour);
-            //System.out.println(product);
+            product = new Flower(ID, name, quantity, price, colour);
             System.out.println("Product of type flower added correctly.");
         } else if (productType == Product.ProductType.DECORATION) {
             Decoration.MaterialType materialType = Tools.chooseMaterialType();
-            product = new Decoration(name, quantity, price, materialType);
-            //System.out.println(product);
+            product = new Decoration(ID, name, quantity, price, materialType);
             System.out.println("Product of type decoration added correctly.");
         }
         return product;
@@ -97,21 +95,21 @@ public class Tools {
         for (Object obj: productArrayJSON) {
             JSONObject object = (JSONObject) obj;
 
-            int ID = (Integer) object.get("ID");
-            ref = (String) object.get("reference");
-            String name = (String) object.get("name");
-            int quantity = (Integer) object.get("quantity");
-            double price = (Double) object.get("price");
-            Product.ProductType type = (Product.ProductType) object.get("type");
+            int ID = object.getInt("ID");
+            ref = object.getString("reference");
+            String name = object.getString("name");
+            int quantity = object.getInt("quantity");
+            double price = object.getDouble("price");
+            Product.ProductType type = Product.ProductType.valueOf(object.getString("type"));
 
             if (type == Product.ProductType.TREE) {
-                float height = (Float) object.get("height");
+                float height = object.getFloat("height");
                 product = new Tree(ID, ref, name, quantity, price, height);
             } else if (type == Product.ProductType.FLOWER) {
-                String colour = (String) object.get("colour");
+                String colour = object.getString("colour");
                 product = new Flower(ID, ref, name, quantity, price, colour);
             } else if (type == Product.ProductType.DECORATION) {
-                Decoration.MaterialType materialType = (Decoration.MaterialType) object.get("material");
+                Decoration.MaterialType materialType = Decoration.MaterialType.valueOf(object.getString("material"));
                 product = new Decoration(ID, ref, name, quantity, price, materialType);
             }
             storeStockFromJSONArray.put(ref, product);
@@ -120,85 +118,83 @@ public class Tools {
 
     }
 
+    //PRODUCT
+    public static Product JSONProductToProduct(JSONObject productJSON) {
+        Product product = null;
+        int ID = productJSON.getInt("ID");
+        String ref = productJSON.getString("ref");
+        String name = productJSON.getString("name");
+        int quantity = productJSON.getInt("quantity");
+        double price = productJSON.getDouble("price");
+        Product.ProductType type = Product.ProductType.valueOf(productJSON.getString("productType"));
+
+        if (type == Product.ProductType.TREE) {
+            float height = productJSON.getFloat("height");
+            product = new Tree(ID, ref, name, quantity, price, height);
+        } else if (type == Product.ProductType.FLOWER) {
+            String colour = productJSON.getString("colour");
+            product = new Flower(ID, ref, name, quantity, price, colour);
+        } else if (type == Product.ProductType.DECORATION) {
+            Decoration.MaterialType materialType = Decoration.MaterialType.valueOf(productJSON.getString("material"));
+            product = new Decoration(ID, ref, name, quantity, price, materialType);
+        }
+
+        return product;
+    }
+
     //TICKETS
     public static HashMap<Integer, ITicket> JSONTicketsToHashMap(JSONArray ticketArrayJSON) {
         HashMap<Integer, ITicket> salesHistoryFromJSONArray = new HashMap<>();
-        int ID = 0;
-
-        for (Object obj: ticketArrayJSON) {
-            JSONObject object = (JSONObject) obj;
-
-            ID = (Integer) object.get("ID");
-            List<TicketLine> ticketLines = (List<TicketLine>) object.get("ticket lines");
-            double totalPrice = (Double) object.get("total price");
-
-            Ticket ticket = new Ticket(ID, ticketLines, totalPrice);
-            salesHistoryFromJSONArray.put(ID, ticket);
+        //estem recuperant tots els tickets en un hashmap salesHistory
+        for (Object ticket: ticketArrayJSON) {
+            JSONObject object = (JSONObject) ticket;
+            int ID = object.getInt("ID");
+            //estem recuperant totes les ticketLines en un array ticketLines
+            JSONArray ticketLines = object.getJSONArray("ticketLines");
+            List<TicketLine> tLines = new ArrayList<>();
+            for (Object line: ticketLines) {
+                JSONObject lineJSON = (JSONObject) line;
+                JSONObject productJSON = lineJSON.getJSONObject("product");
+                Product product = JSONProductToProduct(productJSON);
+                int quantity = lineJSON.getInt("quantity");
+                tLines.add(tLines.size(), new TicketLine(product, quantity));
             }
-
+            double totalPrice = object.getDouble("totalPrice");
+            //una vegada recuperats id, array de lines i el preu fem nou ticket i l'afegim al HashMap de tickets
+            Ticket newTicket = new Ticket(ID, tLines, totalPrice);
+            salesHistoryFromJSONArray.put(ID, newTicket);
+            }
         return salesHistoryFromJSONArray;
-
     }
 
-    //REMOVE PRODUCT I UPDATE PRODUCTS TXT
-    /*public static void removeJSONProduct(String ref, String storeName) {
-        boolean found = false;
-        int i = 0;
-
-        JSONArray productsArrayJSON = Reader.readProductsJSON(storeName);
-
-        while ( i < productsArrayJSON.size() && !found) {
-            JSONObject object = (JSONObject) productsArrayJSON.get(i);
-            if (object.get("reference").equals(ref)) {
-                found = true;
-                productsArrayJSON.remove(i);
-                System.out.println("Product deleted successfully.");
-                try {
-                    FileWriter filewriter = new FileWriter("src\\main\\resources\\Products" + storeName + ".txt", true);
-                    BufferedWriter bufferedwriter = new BufferedWriter(filewriter);
-                    for (Object obj : productsArrayJSON) {
-                        JSONObject object2 = (JSONObject) obj;
-                        filewriter.write(object2.toJSONString() + "\n");
-                    }
-                    bufferedwriter.close();
-                    System.out.println("File updated successfully.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            i++;
-        }
-        if (!found){
-            System.out.println("Product not found in the database.");
-        }
-    }*/
-
-    public static double showStockValueFromJSON(HashMap<String, Product> storeStockFromJSONArray) {
+    public static void showStockValue(HashMap<String, Product> storeStock) {
         double stockValue = 0;
-        for (Product product : storeStockFromJSONArray.values()) {
+        for (Product product : storeStock.values()) {
             stockValue += product.getQuantity()*product.getPrice();
         }
-        return stockValue;
+        System.out.println("TOTAL stock value:" +stockValue+ "€\n");
     }
 
-    public static double showTicketValueFromJSON(HashMap<Integer, ITicket> salesHistoryFromJSONArray) {
+    public static void showTicketValueFromJSON(HashMap<Integer, ITicket> salesHistoryFromJSONArray) {
         double ticketsValues = 0;
         for (ITicket ticket : salesHistoryFromJSONArray.values()) {
             ticketsValues += ((Ticket) ticket).getTotalPrice();
         }
-        return ticketsValues;
+        System.out.println("Store's TOTAL sales: " +ticketsValues+ "€\n");
     }
 
     public static boolean checkExistingStore (String storeName) {
+        String storeNameTrimmed = storeName.trim().replace(" ","_");
         boolean found = false;
         try {
-            File fileToCheck = new File("Stores.txt");
+            File fileToCheck = new File("src/main/resources/Stores.txt");
             BufferedReader br = new BufferedReader(new FileReader(fileToCheck));
-            while (br.readLine() != null && !found) {
-                String line = br.readLine();
-                if(line.contains(storeName)) {
+            String line = br.readLine();
+            while ((line != null) && !found) {
+                if(line.contains(storeNameTrimmed)) {
                     found = true;
                 }
+                line = br.readLine();
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
