@@ -3,9 +3,7 @@ package org.develop;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -191,7 +189,23 @@ public class Tools {
         return ticketsValues;
     }
 
-
-
+    public static boolean checkExistingStore (String storeName) {
+        boolean found = false;
+        try {
+            File fileToCheck = new File("Stores.txt");
+            BufferedReader br = new BufferedReader(new FileReader(fileToCheck));
+            while (br.readLine() != null && !found) {
+                String line = br.readLine();
+                if(line.contains(storeName)) {
+                    found = true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return found;
+    }
 
 }

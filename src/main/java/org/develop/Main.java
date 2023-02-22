@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
-        HashMap<String,IStore> storesList = new HashMap<>();
         int menu = 0;
         do {
             menu = Input.scanningForInt("""
@@ -47,61 +46,57 @@ public class Main {
 
     }
 
-    //case1 A REVISAR PER AFEGIR EL MINIMETODE CHECKEXISTINGFILE A TOOLS
+    //case1 FET
     public static void createFlowerShop() {
         String storeName = Input.scanningForString("Enter the store name:");
-        while(Tools.checkExistingFile(storeName)){
+        while(Tools.checkExistingStore(storeName)){
             storeName = Input.scanningForString("Store name already exists. Choose another store name");
         }
         Writer.writeStoreJSON(new Store(storeName));
         System.out.println("Flower Store " + storeName+ " successfully created");
     }
 
-    //case2 A REVISAR PER AFEGIR EL MINIMETODE CHECKEXISTINGFILE A TOOLS I EL METODE WRITER ADDPRODUCTJSON
+    //case2 FET
     public static void  newProductToStore () {
         String storeName = Input.scanningForString("Please indicate the name of the store:");
-        while (!Tools.checkExistingFile(storeName)) {
+        while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
         Product newProduct = Tools.createProduct();
         Writer.addProductJSON(newProduct, storeName);
     }
 
-    //case3 A REVISAR PER AFEGIR EL MINIMETODE CHECKEXISTINGFILE A TOOLS
+    //case3 FET
     public static void  printCatalog () {
         String storeName = Input.scanningForString("Please indicate store's name:");
-        while (!Tools.checkExistingFile(storeName)) {
+        while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
         JSONArray productArrayJSON = Reader.readProductsJSON(storeName);
-        HashMap<String, Product> storeStockFromJSONArray = Reader.JSONArrayToHashMap(productArrayJSON);
+        HashMap<String, Product> storeStockFromJSONArray = Tools.JSONProductsToHashMap(productArrayJSON);
         storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("TREE")).forEach(p -> System.out.println(p.toString2()));
         storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("FLOWER")).forEach(p -> System.out.println(p.toString2()));
         storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("DECORATION")).forEach(p -> System.out.println(p.toString2()));
     }
 
-    //case4 PENDENT PER METODE WRITER REMOVEPRODUCT
+    //case4 FET
     public static void removeProductFromStore () {
         String storeName = Input.scanningForString("Please indicate the products store's name");
-        while (!Tools.checkExistingFile(storeName)) {
+        while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
         String ref = Input.scanningForString("Please indicate product's reference");
-        if (store.getStoreStock().containsKey(ref)) {
-            store.getStoreStock().remove(ref);
-            System.out.println("The product has been successfully removed from the store's stock");
-        }
-        //JSON STUFF aqui es passa again la store a object json i es fa un overwrite d'aquesta al stores.txt
+        Writer.removeJSONProduct(ref, storeName);
     }
 
-    //case5 PENDENT PER METODE WRITER REMOVEPRODUCT
+    //case5 PENDENT PER METODE WRITER UPDATEPRODUCT
     public static void  printStockQuantity () {
         String storeName = Input.scanningForString("Please indicate the products store's name");
-        while (!Tools.checkExistingFile(storeName)) {
+        while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
         JSONArray productArrayJSON = Reader.readProductsJSON(storeName);
-        HashMap<String, Product> storeStockFromJSONArray = Reader.JSONArrayToHashMap(productArrayJSON);//(canvi a Tools)
+        HashMap<String, Product> storeStockFromJSONArray = Tools.JSONProductsToHashMap(productArrayJSON);//(canvi a Tools)
 
         for (Product product : storeStockFromJSONArray.values()) {
             System.out.println(product);
@@ -111,7 +106,7 @@ public class Main {
     //case6
     public static void  printStockValue () {
         String storeName = Input.scanningForString("Please indicate the products store's name");
-        while (!Tools.checkExistingFile(storeName)) {
+        while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
         JSONArray productArrayJSON = Reader.readProductsJSON(storeName);
@@ -128,7 +123,7 @@ public class Main {
     //case8 CAOS, MIRAR BE
     public static void printHistorySales () {
         String storeName = Input.scanningForString("Please indicate store's name");
-        while (!Tools.checkExistingFile(storeName)) {
+        while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
         JSONObject storeJSON = Reader.readStoreJSON(storeName);
@@ -141,7 +136,7 @@ public class Main {
     //case9
     public static void printTotalSalesValue () {
         String storeName = Input.scanningForString("Please indicate store's name");
-        while (!Tools.checkExistingFile(storeName)) {
+        while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
         JSONArray ticketsArray = Reader.readTicketsJSON(storeName);
