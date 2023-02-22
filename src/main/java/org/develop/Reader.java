@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Reader {
+
     //PRODUCTS
     public static JSONArray readProductsJSON(String storeName) {
         JSONArray productArrayJSON = new JSONArray();
@@ -31,6 +32,7 @@ public class Reader {
                     productArrayJSON.add(object);
                 }
                 bufferedReader.close();
+                System.out.println("File successfully read.");
             } else {
                 System.out.println("Unable to read the file.");
             }
@@ -39,37 +41,6 @@ public class Reader {
         }
 
         return productArrayJSON;
-    }
-
-    public static HashMap<String, Product> JSONArrayToHashMap(JSONArray productArrayJSON) {
-        HashMap<String, Product> storeStockFromJSONArray = new HashMap<>();
-        Product product = null;
-        String ref = "";
-
-        for (Object obj: productArrayJSON) {
-            JSONObject object = (JSONObject) obj;
-
-            int ID = (Integer) object.get("ID");
-            ref = (String) object.get("reference");
-            String name = (String) object.get("name");
-            int quantity = (Integer) object.get("quantity");
-            double price = (Double) object.get("price");
-            Product.ProductType type = (Product.ProductType) object.get("type");
-
-            if (type == Product.ProductType.TREE) {
-                float height = (Float) object.get("height");
-                product = new Tree(ID, ref, name, quantity, price, height);
-            } else if (type == Product.ProductType.FLOWER) {
-                String colour = (String) object.get("colour");
-                product = new Flower(ID, ref, name, quantity, price, colour);
-            } else if (type == Product.ProductType.DECORATION) {
-                Decoration.MaterialType materialType = (Decoration.MaterialType) object.get("material");
-                product = new Decoration(ID, ref, name, quantity, price, materialType);
-            }
-            storeStockFromJSONArray.put(ref, product);
-        }
-        return storeStockFromJSONArray;
-
     }
 
     //STORE
@@ -90,6 +61,7 @@ public class Reader {
                     storeJSON = (JSONObject) parser.parse(line);
                 }
                 bufferedReader.close();
+                System.out.println("File successfully read.");
             } else {
                 System.out.println("Unable to read the file.");
             }
@@ -98,5 +70,35 @@ public class Reader {
         }
 
         return storeJSON;
+    }
+
+    //TICKETS
+    public static JSONArray readTicketsJSON(String storeName) {
+        JSONArray ticketArrayJSON = new JSONArray();
+        String line = "";
+
+        try {
+            File file = new File("Tickets" + storeName + ".txt");
+
+            if (file.exists() && file.canRead()) {
+                FileReader reader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                JSONParser parser = new JSONParser();
+                line = bufferedReader.readLine();
+
+                while (line != null) {
+                    JSONObject object = (JSONObject) parser.parse(line);
+                    ticketArrayJSON.add(object);
+                }
+                bufferedReader.close();
+                System.out.println("File successfully read.");
+            } else {
+                System.out.println("Unable to read the file.");
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return ticketArrayJSON;
     }
 }
