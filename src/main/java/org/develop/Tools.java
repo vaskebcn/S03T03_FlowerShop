@@ -175,7 +175,6 @@ public class Tools {
         }
     }
 
-    //MODIFICACIÓ DEL DE LA CARLA showStockValue() de la classe Store
     public static double showStockValueFromJSON(HashMap<String, Product> storeStockFromJSONArray) {
         double stockValue = 0;
         for (Product product : storeStockFromJSONArray.values()) {
@@ -185,13 +184,11 @@ public class Tools {
     }
 
     public static double showTicketValueFromJSON(HashMap<Integer, ITicket> salesHistoryFromJSONArray) {
-        double ticketValue = 0;
+        double ticketsValues = 0;
         for (ITicket ticket : salesHistoryFromJSONArray.values()) {
-            ticketValue += ((Ticket) ticket).getTicketLines().stream()
-                    .mapToDouble(t -> t.getQuantity() * t.getProduct().getPrice()).sum();
+            ticketsValues += ((Ticket) ticket).getTotalPrice();
         }
-        return ticketValue;
-
+        return ticketsValues;
     }
 
 
