@@ -4,8 +4,8 @@ public class Tree extends Product {
 
     private float height;
 
-    public Tree(String name, int quantity, double price, float height) {
-        super(name, quantity, price, ProductType.TREE);
+    public Tree(int ID, String name, int quantity, double price, float height) {
+        super(ID, name, quantity, price, ProductType.TREE);
         super.generateReference('T');
         this.height = height;
     }
@@ -27,8 +27,8 @@ public class Tree extends Product {
     public String toString() {
         return "Tree{" +
                 "ID=" + super.getID() +
-                ", ref='" + super.getRef() + '\'' +
-                ", name='" + super.getName() + '\'' +
+                ", ref='" + super.getRef() +
+                ", name='" + super.getName() +
                 ", height=" + this.height +
                 ", quantity=" + super.getQuantity() +
                 ", price=" + super.getPrice() +
@@ -38,8 +38,8 @@ public class Tree extends Product {
     public String toString2() {
         return "Tree{" +
                 "ID=" + super.getID() +
-                ", ref='" + super.getRef() + '\'' +
-                ", name='" + super.getName() + '\'' +
+                ", ref='" + super.getRef() +
+                ", name='" + super.getName() +
                 ", height=" + this.height +
                 ", price=" + super.getPrice() +
                 '}';

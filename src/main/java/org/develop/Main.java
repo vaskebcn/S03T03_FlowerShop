@@ -1,13 +1,7 @@
 package org.develop;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 
 public class Main {
@@ -62,7 +56,7 @@ public class Main {
         while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
-        Product newProduct = Tools.createProduct();
+        Product newProduct = Tools.createProduct(storeName);
         Writer.addProductJSON(newProduct, storeName);
     }
 
@@ -74,9 +68,9 @@ public class Main {
         }
         JSONArray productArrayJSON = Reader.readProductsJSON(storeName);
         HashMap<String, Product> storeStockFromJSONArray = Tools.JSONProductsToHashMap(productArrayJSON);
-        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("TREE")).forEach(p -> System.out.println(p.toString2()));
-        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("FLOWER")).forEach(p -> System.out.println(p.toString2()));
-        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType().equals("DECORATION")).forEach(p -> System.out.println(p.toString2()));
+        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType() == Product.ProductType.TREE).forEach(p -> System.out.println(p.toString2()));
+        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType() == Product.ProductType.FLOWER).forEach(p -> System.out.println(p.toString2()));
+        storeStockFromJSONArray.values().stream().filter(v -> v.getProductType() == Product.ProductType.DECORATION).forEach(p -> System.out.println(p.toString2()));
     }
 
     //case4 FET
@@ -97,7 +91,7 @@ public class Main {
         }
         JSONArray storeStockJSON = Reader.readProductsJSON(storeName);
         HashMap<String, Product> storeStock = Tools.JSONProductsToHashMap(storeStockJSON);
-        storeStock.values().forEach(System.out::println);
+        storeStock.values().forEach(v -> System.out.println(v.toString3()));
     }
 
     //case6 FET
@@ -108,7 +102,7 @@ public class Main {
         }
         JSONArray storeStockJSON = Reader.readProductsJSON(storeName);
         HashMap<String, Product> storeStock = Tools.JSONProductsToHashMap(storeStockJSON);
-        Tools.showStockValueFromJSON(storeStock);
+        Tools.showStockValue(storeStock);
     }
 
     //case7 FET
@@ -133,8 +127,9 @@ public class Main {
         while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
-        JSONArray historySales = Reader.readTicketsJSON(storeName);
-        historySales.forEach(System.out::println);
+        JSONArray historySalesJSON = Reader.readTicketsJSON(storeName);
+        HashMap<Integer,ITicket> historySales = Tools.JSONTicketsToHashMap(historySalesJSON);
+        historySales.values().forEach(System.out::println);
     }
 
     //case9 FET
@@ -145,21 +140,7 @@ public class Main {
         }
         JSONArray ticketsArray = Reader.readTicketsJSON(storeName);
         HashMap<Integer, ITicket> historySales = Tools.JSONTicketsToHashMap(ticketsArray);
-        double totalValue = Tools.showTicketValueFromJSON( historySales);
-        System.out.println(storeName+" -> total sales: "+totalValue+"€\n");
+        Tools.showTicketValueFromJSON( historySales);
     }
-
-
 }
-
-
-
-
-/*
-crear els fileReaders i fileWriters opcions menu Writers i Readers
-    Stock: Imprimeix per pantalla tots els arbres, flors i decoració que té la floristeria.
-    Printar per pantalla stock amb quantitats.
-    Printar per pantalla valor total de la floristeria.
-    Mostrar una llista de compres antigues.
-    Visualitzar el total de diners guanyats amb totes les vendes.*/
 
