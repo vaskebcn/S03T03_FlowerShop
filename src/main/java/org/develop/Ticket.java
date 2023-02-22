@@ -14,11 +14,23 @@ public class Ticket implements ITicket{
         this.ID = idCounter;
         idCounter++;
     }
+
+    //Constructor pel mètode JSONArrayToHashMap
+    public Ticket(int ID, List<TicketLine> ticketLines, double totalPrice ) {
+        this.ID = ID;
+        this.ticketLines = ticketLines;
+        this.totalPrice = totalPrice;
+    }
+
     public int getID() {
         return ID;
     }
     public List<TicketLine> getTicketLines() {
         return ticketLines;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
     @Override
@@ -27,9 +39,8 @@ public class Ticket implements ITicket{
         ticketLines.add(ticketLine);
         getTotalPrice();
     }
-
     @Override
-    public void getTotalPrice() {
+    public void calculateTotalPrice() {
         double totalPrice = 0;
         for (TicketLine line : ticketLines) {
             totalPrice += line.getProduct().getPrice()*line.getQuantity();

@@ -56,6 +56,11 @@ public class Writer {
         }
     }
 
+    public static void addProductJSON(Product product, String storeName) {
+        JSONObject jsonObject = createProductJSON(product);
+        writeProductJSON(jsonObject, storeName);
+    }
+
     //STORE
     public static void writeStoreJSON(Store store) {
         JSONObject storeJSON = new JSONObject();
@@ -82,6 +87,35 @@ public class Writer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //TICKET
+    public static void writeTicketJSON(Ticket ticket) {
+        JSONObject ticketJSON = new JSONObject();
+
+        ticketJSON.put("ID", ticket.getID());
+        ticketJSON.put("ticket lines", ticket.getTicketLines());
+        ticketJSON.put("total price", ticket.getTotalPrice());
+
+        String ticketName = (String) ticketJSON.get("name");
+
+        try {
+            File file = new File ("src\\main\\resources\\" + ticketName + ".txt");
+            file.createNewFile();
+
+            if (file.canWrite()) {
+                FileWriter filewriter = new FileWriter(file, true);
+                BufferedWriter bufferedWriter = new BufferedWriter(filewriter);
+                bufferedWriter.write(ticketJSON.toJSONString() + "\n");
+                bufferedWriter.close();
+                System.out.println("Successfully written JSON Object to a file.");
+            } else {
+                System.out.println("Unable to write the JSON Object to a file.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     //--------------------------------
