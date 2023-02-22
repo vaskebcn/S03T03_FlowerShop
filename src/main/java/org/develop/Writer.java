@@ -1,11 +1,9 @@
 package org.develop;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class Writer {
 
@@ -59,6 +57,33 @@ public class Writer {
     public static void addProductJSON(Product product, String storeName) {
         JSONObject jsonObject = createProductJSON(product);
         writeProductJSON(jsonObject, storeName);
+    }
+
+    //REMOVE PRODUCT I UPDATE PRODUCTS TXT
+    public static void removeJSONProduct(String ref, String storeName) {
+
+        try {
+            File originalFile = new File("src\\main\\resources\\Products" + storeName + ".txt");
+            File temporalFile = new File("src\\main\\resources\\Products" + storeName + "Temp.txt");
+
+            BufferedReader bReader = new BufferedReader(new FileReader(originalFile));
+            BufferedWriter bWriter = new BufferedWriter(new FileWriter(temporalFile));
+
+            String currentLine;
+
+            while ((currentLine = bReader.readLine()) != null) {
+                if (currentLine.contains(ref)) continue;
+                bWriter.write(currentLine + System.getProperty("line.separator"));
+
+            }
+            bReader.close();
+            bWriter.close();
+
+            originalFile.delete();
+            temporalFile.renameTo(originalFile);
+        } catch (RuntimeException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //STORE
