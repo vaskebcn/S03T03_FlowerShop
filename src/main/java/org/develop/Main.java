@@ -36,7 +36,7 @@ public class Main {
                 case 4 -> removeProductFromStore();
                 case 5 -> printStockQuantity();
                 case 6 -> printStockValue();
-                case 7 -> purchaseSale();
+                case 7 -> purchaseStoreSale();
                 case 8 -> printHistorySales();
                 case 9 -> printTotalSalesValue();
                 default -> System.out.println("Error. Introduce a number between 0 to 13.");
@@ -89,51 +89,55 @@ public class Main {
         Writer.removeJSONProduct(ref, storeName);
     }
 
-    //case5 PENDENT PER METODE WRITER UPDATEPRODUCT
+    //case5 FET
     public static void  printStockQuantity () {
         String storeName = Input.scanningForString("Please indicate the products store's name");
         while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
-        JSONArray productArrayJSON = Reader.readProductsJSON(storeName);
-        HashMap<String, Product> storeStockFromJSONArray = Tools.JSONProductsToHashMap(productArrayJSON);//(canvi a Tools)
-
-        for (Product product : storeStockFromJSONArray.values()) {
-            System.out.println(product);
-        }
+        JSONArray storeStockJSON = Reader.readProductsJSON(storeName);
+        HashMap<String, Product> storeStock = Tools.JSONProductsToHashMap(storeStockJSON);
+        storeStock.values().forEach(System.out::println);
     }
 
-    //case6
+    //case6 FET
     public static void  printStockValue () {
         String storeName = Input.scanningForString("Please indicate the products store's name");
         while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
-        JSONArray productArrayJSON = Reader.readProductsJSON(storeName);
-        HashMap<String, Product> storeStockFromJSONArray = Reader.JSONArrayToHashMap(productArrayJSON);
-        Tools.showStockValueFromJSON(storeStockFromJSONArray);
+        JSONArray storeStockJSON = Reader.readProductsJSON(storeName);
+        HashMap<String, Product> storeStock = Tools.JSONProductsToHashMap(storeStockJSON);
+        Tools.showStockValueFromJSON(storeStock);
     }
 
-    //case7
-    public static void  purchaseSale () {
-
-
+    //case7 FET
+    public static void  purchaseStoreSale () {
+        String storeName = Input.scanningForString("Please indicate the products store's name");
+        while (!Tools.checkExistingStore(storeName)) {
+            storeName = Input.scanningForString("Store does not exist. Choose another store name:");
+        }
+        Store store = new Store(storeName);
+        JSONArray storeStockJSON = Reader.readProductsJSON(storeName);
+        HashMap<String,Product> storeStock = Tools.JSONProductsToHashMap(storeStockJSON);
+        store.setStoreStock(storeStock);
+        JSONArray historySalesJSON = Reader.readTicketsJSON(storeName);
+        HashMap<Integer,ITicket> historySales = Tools.JSONTicketsToHashMap(historySalesJSON);
+        store.setSalesHistory(historySales);
+        store.purchaseSale();
     }
 
-    //case8 CAOS, MIRAR BE
+    //case8 FET
     public static void printHistorySales () {
         String storeName = Input.scanningForString("Please indicate store's name");
         while (!Tools.checkExistingStore(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
-        JSONObject storeJSON = Reader.readStoreJSON(storeName);
-        IStore storeFromJSONArray = Tools.readTicketsJSON(storeJSON);
-
-        /* storesListFromJSONArray.values().stream()
-                .filter(store -> store.getName().equals(storeName))*/
+        JSONArray historySales = Reader.readTicketsJSON(storeName);
+        historySales.forEach(System.out::println);
     }
 
-    //case9
+    //case9 FET
     public static void printTotalSalesValue () {
         String storeName = Input.scanningForString("Please indicate store's name");
         while (!Tools.checkExistingStore(storeName)) {
