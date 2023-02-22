@@ -141,7 +141,7 @@ public class Tools {
     }
 
     //REMOVE PRODUCT I UPDATE PRODUCTS TXT
-    public static void removeJSONProduct(String ref, String storeName) {
+    /*public static void removeJSONProduct(String ref, String storeName) {
         boolean found = false;
         int i = 0;
 
@@ -171,7 +171,7 @@ public class Tools {
         if (!found){
             System.out.println("Product not found in the database.");
         }
-    }
+    }*/
 
     public static double showStockValueFromJSON(HashMap<String, Product> storeStockFromJSONArray) {
         double stockValue = 0;

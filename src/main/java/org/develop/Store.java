@@ -27,6 +27,12 @@ public class Store implements IStore{
     public void setStoreName(String storeName) {
         this.storeName = storeName;
     }
+    public void setStoreStock(HashMap<String,Product> storeStock) {
+        this.storeStock = storeStock;
+    }
+    public void setSalesHistory(HashMap<Integer,ITicket> salesHistory) {
+        this.salesHistory = salesHistory;
+    }
 
     @Override
     public void addProduct(Product product) {
@@ -69,10 +75,12 @@ public class Store implements IStore{
                 if (product.getQuantity() > quantity) {
                     product.sellQuantity(quantity);
                     saleTicket.addTicketLine(product, quantity);
+                    Writer.updateJSONProduct(ref, this.storeName);
                 } else if (product.getQuantity() == quantity){
                     storeStock.remove(ref);
                     System.out.println("Lucky you! Last ones on stock!");
                     saleTicket.addTicketLine(product, quantity);
+                    Writer.removeJSONProduct(ref, this.storeName);
                 } else if (product.getQuantity() < quantity) {
                     String limitedSale = Input.scanningForString("Sorry, currently we have only " +product.getQuantity()+ " on stock. Would you like to acquire the remaining stock?");
                     if (limitedSale.equalsIgnoreCase("yes")) {
@@ -80,6 +88,7 @@ public class Store implements IStore{
                         storeStock.remove(ref);
                         System.out.println("Excellent choice");
                         saleTicket.addTicketLine(product, quantity);
+                        Writer.removeJSONProduct(ref, this.storeName);
                     }
                 }
             } else {
@@ -89,8 +98,8 @@ public class Store implements IStore{
             String nextSale = Input.scanningForString("Would you like to add anything else to your sale?");
             if (nextSale.equalsIgnoreCase("no")) {
                 System.out.print(saleTicket);
-                salesHistory.put(((Ticket) saleTicket).getID(), saleTicket); //he afegit el ticket al hashmap de compres fetes
-                Writer.updateStoreDatabase(this);
+                salesHistory.put(((Ticket) saleTicket).getID(), saleTicket);
+                Writer.writeTicketJSON((Ticket)saleTicket);
                 saleCompleted = true;
             }
         }
