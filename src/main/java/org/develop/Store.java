@@ -95,20 +95,4 @@ public class Store implements IStore{
             }
         }
     }
-
-    //aqui es pot millorar, suposo que es poden endreçar per poder imprimir tots alhora, pero vamos aixi tambe tira de moment
-    @Override
-    public void showStock() {
-        storeStock.values().stream().filter(v -> v.getProductType().equals("TREE")).forEach(System.out::println);
-        storeStock.values().stream().filter(v -> v.getProductType().equals("FLOWER")).forEach(System.out::println);
-        storeStock.values().stream().filter(v -> v.getProductType().equals("DECORATION")).forEach(System.out::println);
-    }
-
-    public double showStockValue() {
-        double stockValue = 0;
-        for (Product product : storeStock.values()) {
-            stockValue += product.getQuantity()*product.getPrice();
-        }
-        return stockValue;
-    }
 }
