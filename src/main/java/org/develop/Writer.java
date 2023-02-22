@@ -1,7 +1,5 @@
 package org.develop;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.*;
 
 import java.io.*;
 
@@ -10,13 +8,12 @@ public class Writer {
     //PRODUCTS
     public static JSONObject createProductJSON(Product product) {
         JSONObject productJSON = new JSONObject();
-
         productJSON.put("ID", product.getID());
         productJSON.put("reference", product.getRef());
         productJSON.put("name", product.getName());
         productJSON.put("quantity", product.getQuantity());
         productJSON.put("price", product.getPrice());
-        productJSON.put("type", product.getProductType());
+        productJSON.put("type", String.valueOf(product.getProductType()));
 
         if (product.getProductType() == Product.ProductType.TREE) {
             Tree tree = (Tree) product;
@@ -26,24 +23,20 @@ public class Writer {
             productJSON.put("colour", flower.getColour());
         } else if (product.getProductType() == Product.ProductType.DECORATION) {
             Decoration decoration = (Decoration) product;
-            productJSON.put ("material", decoration.getMaterial());
+            productJSON.put ("material", String.valueOf(decoration.getMaterial()));
         }
-
         return productJSON;
     }
 
     public static void writeProductJSON(JSONObject productJSON, String storeName) {
-
+        storeName = storeName.trim().replace(" ","_");
         String fileName = "Products" + storeName;
-
         try {
-            File file = new File ("src\\main\\resources\\" + fileName + ".txt");
-            file.createNewFile();
-
+            File file = new File ("src/main/resources/" + fileName + ".txt");
             if (file.canWrite()) {
                 FileWriter filewriter = new FileWriter(file, true);
                 BufferedWriter bufferedwriter = new BufferedWriter(filewriter);
-                filewriter.write(productJSON.toJSONString() + "\n");
+                filewriter.write(productJSON.toString() + "\n");
                 bufferedwriter.close();
                 System.out.println("Successfully written JSON Object to a file.");
             } else {
@@ -59,46 +52,53 @@ public class Writer {
         writeProductJSON(jsonObject, storeName);
     }
 
-    //REMOVE PRODUCT I UPDATE PRODUCTS TXT
+    //REMOVE PRODUCT TXT
     public static void removeJSONProduct(String ref, String storeName) {
-
+        storeName = storeName.trim().replace(" ","_");
         try {
-            File originalFile = new File("src\\main\\resources\\Products" + storeName + ".txt");
-            File temporalFile = new File("src\\main\\resources\\Products" + storeName + "Temp.txt");
+            File originalFile = new File("src/main/resources/Products" + storeName + ".txt");
+            File temporalFile = new File("src/main/resources/Products" + storeName + "Temp.txt");
 
             BufferedReader bReader = new BufferedReader(new FileReader(originalFile));
             BufferedWriter bWriter = new BufferedWriter(new FileWriter(temporalFile));
 
             String currentLine;
-
             while ((currentLine = bReader.readLine()) != null) {
                 if (currentLine.contains(ref)) continue;
                 bWriter.write(currentLine + System.getProperty("line.separator"));
-
             }
             bReader.close();
             bWriter.close();
-
             originalFile.delete();
             temporalFile.renameTo(originalFile);
+            System.out.println("Product successfully removed.");
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
         }
     }
 
+    //UPDATE PRODUCT TXT
+    public static void updateJSONProduct(Product product, String storeName) {
+        Writer.removeJSONProduct(product.getRef(), storeName);
+        JSONObject productJSON = createProductJSON(product);
+        Writer.writeProductJSON(productJSON, storeName);
+    }
+
     //STORE
     public static void writeStoreJSON(Store store) {
+        String storeName = store.getStoreName().trim().replace(" ","_");
         JSONObject storeJSON = new JSONObject();
-
-        storeJSON.put("name", store.getStoreName());
-
+        storeJSON.put("name", storeName);
         try {
-            File file = new File ("src\\main\\resources\\Stores.txt");
-
+            File file = new File ("src/main/resources/Stores.txt");
+            File productsFile = new File("src/main/resources/Products"+storeName+".txt");
+            productsFile.createNewFile();
+            File ticketsFile = new File("src/main/resources/Tickets"+storeName+".txt");
+            ticketsFile.createNewFile();
             if (file.canWrite()) {
                 FileWriter filewriter = new FileWriter(file, true);
                 BufferedWriter bufferedWriter = new BufferedWriter(filewriter);
-                bufferedWriter.write(storeJSON.toJSONString() + "\n");
+                bufferedWriter.write(storeJSON.toString() + "\n");
                 bufferedWriter.close();
                 System.out.println("Successfully written JSON Object to a file.");
             } else {
@@ -110,23 +110,19 @@ public class Writer {
     }
 
     //TICKET
-    public static void writeTicketJSON(Ticket ticket) {
+    public static void writeTicketJSON(Ticket ticket, String storeName) {
         JSONObject ticketJSON = new JSONObject();
-
+        String fileName = "Tickets" + storeName.trim().replace(" ","_");
         ticketJSON.put("ID", ticket.getID());
-        ticketJSON.put("ticket lines", ticket.getTicketLines());
-        ticketJSON.put("total price", ticket.getTotalPrice());
-
-        String ticketName = (String) ticketJSON.get("name");
+        ticketJSON.put("ticketLines", ticket.getTicketLines());
+        ticketJSON.put("totalPrice", ticket.getTotalPrice());
 
         try {
-            File file = new File ("src\\main\\resources\\" + ticketName + ".txt");
-            file.createNewFile();
-
+            File file = new File ("src/main/resources/" + fileName + ".txt");
             if (file.canWrite()) {
                 FileWriter filewriter = new FileWriter(file, true);
                 BufferedWriter bufferedWriter = new BufferedWriter(filewriter);
-                bufferedWriter.write(ticketJSON.toJSONString() + "\n");
+                bufferedWriter.write(ticketJSON.toString() + "\n");
                 bufferedWriter.close();
                 System.out.println("Successfully written JSON Object to a file.");
             } else {
@@ -135,14 +131,5 @@ public class Writer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    //--------------------------------
-
-    public static void updateStoreDatabase(Store store) {
-        //JSON STUFF passar store a json i sobreescriure la store LaPepita al stores.txt metode1
-        //JSON STUFF passar products de la store a json i sobreescriure LaPepitaStock.txt metode2
-        //JSON STUFF passar historySales de la store a json i afegir a LaPepitaHistorySales.txt metode3
     }
 }

@@ -1,7 +1,5 @@
 package org.develop;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class Store implements IStore{
@@ -65,7 +63,9 @@ public class Store implements IStore{
         Sino, comencem el bucle de nou demanant un nou producte*/
     @Override
     public void purchaseSale() {
-        ITicket saleTicket = new Ticket();
+        String trimmedStoreName = storeName.trim().replace(" ","_");
+        int ID = Reader.readLastID("Tickets"+trimmedStoreName+".txt");
+        ITicket saleTicket = new Ticket(ID);
         boolean saleCompleted = false;
         while (!saleCompleted) {
             String ref = Input.scanningForString("Please indicate product reference");
@@ -75,7 +75,7 @@ public class Store implements IStore{
                 if (product.getQuantity() > quantity) {
                     product.sellQuantity(quantity);
                     saleTicket.addTicketLine(product, quantity);
-                    Writer.updateJSONProduct(ref, this.storeName);
+                    Writer.updateJSONProduct(product, this.storeName);
                 } else if (product.getQuantity() == quantity){
                     storeStock.remove(ref);
                     System.out.println("Lucky you! Last ones on stock!");
@@ -99,7 +99,7 @@ public class Store implements IStore{
             if (nextSale.equalsIgnoreCase("no")) {
                 System.out.print(saleTicket);
                 salesHistory.put(((Ticket) saleTicket).getID(), saleTicket);
-                Writer.writeTicketJSON((Ticket)saleTicket);
+                Writer.writeTicketJSON((Ticket)saleTicket, this.storeName);
                 saleCompleted = true;
             }
         }
