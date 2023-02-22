@@ -144,9 +144,10 @@ public class Main {
         while (!Tools.checkExistingFile(storeName)) {
             storeName = Input.scanningForString("Store does not exist. Choose another store name:");
         }
-        JSONArray historySales = readTicketsJSON(storeName);
-        HashMap<Integer, ITicket> ticketsList = JSONTicketsToHashMap(historySales);
-        showStockValueFromJSON()
+        JSONArray ticketsArray = Reader.readTicketsJSON(storeName);
+        HashMap<Integer, ITicket> historySales = Tools.JSONTicketsToHashMap(ticketsArray);
+        double totalValue = Tools.showTicketValueFromJSON( historySales);
+        System.out.println(storeName+" -> total sales: "+totalValue+"€\n");
     }
 
 
